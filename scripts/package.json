@@ -1,0 +1,15 @@
+{
+  "name": "legal-watch-scripts",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "법제처 법령 공포/시행 + 정부입법예고 데이터 수집기",
+  "scripts": {
+    "fetch": "node fetch.mjs",
+    "fetch:laws": "node fetch-laws.mjs",
+    "fetch:bills": "node fetch-bills.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
