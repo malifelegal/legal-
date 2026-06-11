@@ -1,0 +1,58 @@
+name: 법령 데이터 수집 & 배포
+
+# 매일 06:00 KST(=21:00 UTC) 자동 수집 + 수동 실행 지원
+on:
+  schedule:
+    - cron: "0 21 * * *"
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "docs/**"
+      - "scripts/**"
+      - ".github/workflows/update-data.yml"
+
+# GitHub Pages 배포에 필요한 권한
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: 데이터 수집 (법령 공포/시행 + 정부입법예고)
+        working-directory: scripts
+        env:
+          # 미설정 시 lawgo.mjs 의 기본 OC 사용. 보안상 Secret 등록 권장.
+          LAW_OC: ${{ secrets.LAW_OC }}
+          # 정부입법예고 serviceKey. 미설정 시 입법예고 탭은 안내만 표시.
+          DATA_GO_KR_KEY: ${{ secrets.DATA_GO_KR_KEY }}
+        run: node fetch.mjs
+
+      - name: Pages 아티팩트 업로드
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: GitHub Pages 배포
+        id: deployment
+        uses: actions/deploy-pages@v4
