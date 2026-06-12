@@ -29,17 +29,48 @@ export function asArray(v) {
 export async function drf(kind, params) {
   const qs = new URLSearchParams({ OC, type: 'JSON', ...params });
   const url = `${DRF_BASE}/${kind}.do?${qs.toString()}`;
-  const res = await fetch(url, {
-    headers: {
-      // 일부 게이트웨이는 기본 UA를 막으므로 브라우저 UA를 명시한다.
-      'User-Agent':
-        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124 Safari/537.36',
-      Accept: 'application/json, text/plain, */*',
-    },
-  });
-  if (!res.ok) {
-    throw new Error(`DRF ${kind} HTTP ${res.status} :: ${url}`);
+
+  const MAX_RETRY = 3;
+  let lastErr;
+
+  for (let attempt = 1; attempt <= MAX_RETRY; attempt++) {
+    try {
+      // 20초 타임아웃
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), 20000);
+
+      const res = await fetch(url, {
+        signal: controller.signal,
+        headers: {
+          'User-Agent':
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124 Safari/537.36',
+          Accept: 'application/json, text/plain, */*',
+        },
+      }).finally(() => clearTimeout(timer));
+
+      if (!res.ok) {
+        throw new Error(`DRF ${kind} HTTP ${res.status} :: ${url}`);
+      }
+
+      const text = await res.text();
+      try {
+        return JSON.parse(text);
+      } catch {
+        throw new Error(
+          `DRF ${kind} JSON 파싱 실패 (인증키 OC=${OC} 확인 필요). 응답 일부: ${text.slice(0, 200)}`
+        );
+      }
+    } catch (e) {
+      lastErr = e;
+      console.error(`[drf] 시도 ${attempt}/${MAX_RETRY} 실패: ${e.name} ${e.message}`);
+      // 마지막 시도가 아니면 잠시 쉬고 재시도
+      if (attempt < MAX_RETRY) {
+        await new Promise((r) => setTimeout(r, 2000 * attempt));
+      }
+    }
   }
+  throw new Error(`DRF ${kind} 최종 실패 :: ${lastErr?.name} ${lastErr?.message} :: ${url}`);
+}
   const text = await res.text();
   try {
     return JSON.parse(text);
