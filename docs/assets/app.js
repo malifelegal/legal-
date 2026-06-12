@@ -9,7 +9,9 @@ const state = {
   groupByMinistry: true, // 부처별 그룹 표시 on/off
   laws: [],
   bills: [],
+  featured: [], // 주요 법령(featured.json)
   billsEnabled: false,
+  selected: {}, // 체크박스로 고른 주요 법령 후보 { key: lawObject }
 };
 
 const $ = (sel) => document.querySelector(sel);
@@ -48,6 +50,11 @@ function primaryMinistry(m) {
   return String(m).split(',')[0].trim() || '기타';
 }
 
+// 법령 고유 키 (법령ID + 법령일련번호)
+function lawKey(x) {
+  return `${x.id || ''}_${x.mst || ''}`;
+}
+
 function esc(s) {
   return String(s ?? '').replace(/[&<>"]/g, (c) =>
     ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c])
@@ -76,13 +83,22 @@ function attachmentsHTML(atts) {
 }
 
 /* ---------- 카드 렌더 ---------- */
-function lawCard(x) {
+// selectable=true 이면 카드에 체크박스를 단다(법령 탭에서만)
+function lawCard(x, selectable) {
   const cls = lawTypeClass(x.lawType);
   const future = isFuture(x.enforcementDate);
-  return `<article class="card">
-    <div class="card-head"><h2>${esc(x.name)}${
-    x.abbr ? ` <span class="abbr">(${esc(x.abbr)})</span>` : ''
-  }</h2></div>
+  const key = lawKey(x);
+  const checked = !!state.selected[key];
+  const checkbox = selectable
+    ? `<label class="pick" title="주요 법령 후보로 선택">
+         <input type="checkbox" data-pick="${esc(key)}" ${checked ? 'checked' : ''} />
+       </label>`
+    : '';
+  return `<article class="card${checked && selectable ? ' is-picked' : ''}">
+    <div class="card-head">
+      <h2>${esc(x.name)}${x.abbr ? ` <span class="abbr">(${esc(x.abbr)})</span>` : ''}</h2>
+      ${checkbox}
+    </div>
     <div class="badges">
       ${x.lawType ? `<span class="badge ${cls}">${esc(x.lawType)}</span>` : ''}
       ${x.revisionType ? `<span class="badge rev">${esc(x.revisionType)}</span>` : ''}
@@ -149,7 +165,6 @@ function applyFilter(items) {
         if (!lawTypeMatches(v, state.filter.value)) return false;
       } else if (v !== state.filter.value) return false;
     }
-    // 소관부처(대표부처) 복수 필터 — 선택된 부처 중 하나라도 일치하면 통과
     if (state.ministries.length > 0 && !state.ministries.includes(primaryMinistry(x.ministry))) {
       return false;
     }
@@ -164,12 +179,14 @@ function lawTypeMatches(type, group) {
 
 function buildFilters() {
   const box = $('#filters');
-  if (state.tab !== 'laws') {
+  // 법령 탭과 주요 법령 탭에서 필터 노출 (입법예고 탭은 없음)
+  if (state.tab === 'bills') {
     box.innerHTML = '';
     return;
   }
 
-  // 1줄: 법령구분 필터
+  const source = state.tab === 'featured' ? state.featured : state.laws;
+
   const groups = [
     { label: '전체', value: null },
     { label: '법률', value: 'law' },
@@ -185,9 +202,8 @@ function buildFilters() {
     )
     .join('');
 
-  // 2줄: 소관부처 복수 필터 (데이터에 존재하는 부처만, 건수 많은 순)
   const counts = {};
-  state.laws.forEach((x) => {
+  source.forEach((x) => {
     const m = primaryMinistry(x.ministry);
     counts[m] = (counts[m] || 0) + 1;
   });
@@ -206,13 +222,11 @@ function buildFilters() {
       )
       .join('');
 
-  // 선택 요약 + 해제 (복수 선택 시)
   const selInfo =
     sel.length > 0
       ? `<button class="chip clear" data-ministry-clear="1">선택 ${sel.length}개 해제 ✕</button>`
       : '';
 
-  // 3줄: 부처별 그룹 표시 토글
   const groupToggle = `<button class="chip toggle ${
     state.groupByMinistry ? 'is-active' : ''
   }" data-grouptoggle="1">${state.groupByMinistry ? '☑' : '☐'} 부처별 묶어보기</button>`;
@@ -229,6 +243,7 @@ function render() {
   buildFilters();
   $('#count-laws').textContent = state.laws.length;
   $('#count-bills').textContent = state.bills.length;
+  $('#count-featured').textContent = state.featured.length;
 
   document.querySelectorAll('.tab').forEach((t) =>
     t.classList.toggle('is-active', t.dataset.tab === state.tab)
@@ -239,14 +254,18 @@ function render() {
 
   if (state.tab === 'laws') {
     const items = applyFilter(state.laws);
-    if (!items.length) {
-      $('#panel-laws').innerHTML = `<p class="empty">조건에 맞는 법령이 없습니다.</p>`;
-    } else if (state.groupByMinistry) {
-      $('#panel-laws').innerHTML = renderGrouped(items);
+    renderLawPanel('#panel-laws', items, true);
+    updateSelectbar();
+  } else if (state.tab === 'featured') {
+    $('#selectbar').hidden = true;
+    const items = applyFilter(state.featured);
+    if (!state.featured.length) {
+      $('#panel-featured').innerHTML = featuredNotice();
     } else {
-      $('#panel-laws').innerHTML = items.map(lawCard).join('');
+      renderLawPanel('#panel-featured', items, false);
     }
   } else {
+    $('#selectbar').hidden = true;
     const panel = $('#panel-bills');
     if (!state.billsEnabled && state.bills.length === 0) {
       panel.innerHTML = billsNotice();
@@ -259,8 +278,20 @@ function render() {
   }
 }
 
-// 부처별로 묶어서 렌더 (대표부처 기준, 부처 내 시행일 빠른 순)
-function renderGrouped(items) {
+function renderLawPanel(panelSel, items, selectable) {
+  const panel = $(panelSel);
+  if (!items.length) {
+    panel.innerHTML = `<p class="empty">조건에 맞는 법령이 없습니다.</p>`;
+    return;
+  }
+  if (state.groupByMinistry) {
+    panel.innerHTML = renderGrouped(items, selectable);
+  } else {
+    panel.innerHTML = items.map((x) => lawCard(x, selectable)).join('');
+  }
+}
+
+function renderGrouped(items, selectable) {
   const groups = {};
   items.forEach((x) => {
     const m = primaryMinistry(x.ministry);
@@ -275,7 +306,7 @@ function renderGrouped(items) {
         .sort((a, b) =>
           String(a.enforcementDate || '').localeCompare(String(b.enforcementDate || ''))
         )
-        .map(lawCard)
+        .map((x) => lawCard(x, selectable))
         .join('');
       return `<section class="ministry-group">
         <h3 class="ministry-title">${esc(m)} <span class="ministry-count">${groups[m].length}건</span></h3>
@@ -283,6 +314,15 @@ function renderGrouped(items) {
       </section>`;
     })
     .join('');
+}
+
+function featuredNotice() {
+  return `<div class="notice">
+    <h3>주요 법령이 아직 없습니다</h3>
+    <p><b>법령 공포·시행</b> 탭에서 카드의 체크박스로 주요 법령을 고른 뒤,
+    아래 <b>선택 목록 내보내기</b>로 만든 내용을 <code>docs/data/featured.json</code> 에 저장하면
+    이 탭에 팀 공유용으로 표시됩니다.</p>
+  </div>`;
 }
 
 function billsNotice() {
@@ -295,6 +335,29 @@ function billsNotice() {
       <li>다음 자동 수집(매일) 또는 수동 실행 시 입법예고가 채워집니다</li>
     </ol>
   </div>`;
+}
+
+/* ---------- 선택 바 ---------- */
+function updateSelectbar() {
+  const bar = $('#selectbar');
+  const n = Object.keys(state.selected).length;
+  $('#sel-count').textContent = n;
+  bar.hidden = n === 0;
+}
+
+/* ---------- 내보내기 ---------- */
+function openExport() {
+  const list = Object.values(state.selected);
+  // 시행일 빠른 순 정렬
+  list.sort((a, b) =>
+    String(a.enforcementDate || '').localeCompare(String(b.enforcementDate || ''))
+  );
+  $('#export-text').value = JSON.stringify(list, null, 2) + '\n';
+  $('#export-modal').hidden = false;
+}
+
+function closeExport() {
+  $('#export-modal').hidden = true;
 }
 
 /* ---------- 이벤트 ---------- */
@@ -316,33 +379,75 @@ function bindEvents() {
   $('#filters').addEventListener('click', (e) => {
     const btn = e.target.closest('.chip');
     if (!btn) return;
-
-    // 부처별 그룹 토글
     if (btn.dataset.grouptoggle) {
       state.groupByMinistry = !state.groupByMinistry;
       render();
       return;
     }
-    // 전체 부처 (선택 해제)
     if (btn.dataset.ministryAll || btn.dataset.ministryClear) {
       state.ministries = [];
       render();
       return;
     }
-    // 소관부처 복수 토글
     if (btn.hasAttribute('data-ministry')) {
       const m = btn.dataset.ministry;
       const i = state.ministries.indexOf(m);
-      if (i >= 0) state.ministries.splice(i, 1); // 이미 선택됨 → 해제
-      else state.ministries.push(m); // 새로 선택
+      if (i >= 0) state.ministries.splice(i, 1);
+      else state.ministries.push(m);
       render();
       return;
     }
-    // 법령구분 필터
     if (btn.hasAttribute('data-filterval')) {
       const val = btn.dataset.filterval || null;
       state.filter = val ? { key: 'lawType', value: val } : null;
       render();
+    }
+  });
+
+  // 체크박스 선택 (이벤트 위임)
+  document.addEventListener('change', (e) => {
+    const cb = e.target.closest('input[data-pick]');
+    if (!cb) return;
+    const key = cb.dataset.pick;
+    if (cb.checked) {
+      // 전체 laws에서 해당 법령 객체 찾기
+      const found = state.laws.find((x) => lawKey(x) === key);
+      if (found) state.selected[key] = found;
+    } else {
+      delete state.selected[key];
+    }
+    // 카드 음영 갱신 + 선택바 갱신 (전체 재렌더 없이)
+    const card = cb.closest('.card');
+    if (card) card.classList.toggle('is-picked', cb.checked);
+    updateSelectbar();
+  });
+
+  // 선택 해제 / 내보내기
+  $('#sel-clear').addEventListener('click', () => {
+    state.selected = {};
+    render();
+  });
+  $('#sel-export').addEventListener('click', openExport);
+  $('#modal-close').addEventListener('click', closeExport);
+  $('#export-modal').addEventListener('click', (e) => {
+    if (e.target.id === 'export-modal') closeExport();
+  });
+  $('#export-copy').addEventListener('click', () => {
+    const ta = $('#export-text');
+    ta.select();
+    const done = () => {
+      const btn = $('#export-copy');
+      btn.textContent = '복사됨 ✓';
+      setTimeout(() => (btn.textContent = '복사하기'), 1500);
+    };
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(ta.value).then(done).catch(() => {
+        document.execCommand('copy');
+        done();
+      });
+    } else {
+      document.execCommand('copy');
+      done();
     }
   });
 
@@ -361,13 +466,15 @@ function bindEvents() {
 
 /* ---------- 부트스트랩 ---------- */
 async function init() {
-  const [laws, bills, meta] = await Promise.all([
+  const [laws, bills, featured, meta] = await Promise.all([
     loadJSON('./data/laws.json', []),
     loadJSON('./data/bills.json', []),
+    loadJSON('./data/featured.json', []),
     loadJSON('./data/meta.json', null),
   ]);
   state.laws = Array.isArray(laws) ? laws : [];
   state.bills = Array.isArray(bills) ? bills : [];
+  state.featured = Array.isArray(featured) ? featured : [];
   state.billsEnabled = !!meta?.sources?.bills?.enabled;
 
   const metaEl = $('#meta');
