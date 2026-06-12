@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>월간 법령 제·개정 현황 | 미래에셋생명 법무팀</title>
+<meta name="description" content="월간 법령 제·개정 현황을 한눈에. 주요 법령을 클릭하면 카드뉴스가 새 창에서 열립니다." />
+<style>
+:root{
+  --orange:#F58220; --orange-lt:#FEF0E3; --orange-md:#FDDCBA;
+  --blue:#043B72; --blue-lt:#E8EFF7;
+  --gray-1:#F7F8FA; --gray-2:#ECEFF4; --gray-3:#A0A6A8; --gray-4:#5A6370;
+  --text:#1A1E23; --red:#D93025; --green:#1A7F46;
+  --r-card:16px; --r-sm:10px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  font-family:'Apple SD Gothic Neo','Malgun Gothic','Noto Sans KR',sans-serif;
+  background:var(--gray-1); color:var(--text); padding:40px 24px 64px;
+}
+.wrap{max-width:1040px;margin:0 auto;}
+
+/* HEADER */
+.page-header{
+  border-bottom:2px solid var(--orange); padding-bottom:18px; margin-bottom:24px;
+  display:flex; align-items:flex-end; justify-content:space-between; gap:16px; flex-wrap:wrap;
+}
+.eyebrow{font-size:10px;font-weight:800;letter-spacing:3px;color:var(--orange);text-transform:uppercase;margin-bottom:6px;}
+.page-header h1{font-size:26px;font-weight:900;color:var(--blue);line-height:1.25;}
+.header-right{font-size:11.5px;color:var(--gray-3);line-height:1.8;text-align:right;}
+.header-right strong{color:var(--blue);}
+.header-right a{color:var(--gray-4);text-decoration:none;border-bottom:1px dotted var(--gray-3);}
+
+/* STATS */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:26px;}
+.stat{background:#fff;border:1px solid var(--gray-2);border-radius:var(--r-card);padding:18px 20px;position:relative;overflow:hidden;}
+.stat::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--orange);}
+.stat .s-num{font-size:30px;font-weight:900;color:var(--blue);line-height:1;}
+.stat .s-num small{font-size:14px;font-weight:700;color:var(--gray-3);margin-left:3px;}
+.stat .s-label{font-size:11.5px;color:var(--gray-4);margin-top:7px;font-weight:600;}
+.stat.accent::before{background:var(--blue);}
+.stat.accent .s-num{color:var(--orange);}
+
+/* MONTH SELECTOR */
+.month-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:22px;}
+.month-tab{
+  background:#fff;border:1px solid var(--gray-2);border-radius:20px;padding:8px 18px;
+  font-size:13px;font-weight:700;color:var(--gray-4);cursor:pointer;transition:.15s;
+}
+.month-tab:hover{border-color:var(--orange-md);}
+.month-tab.active{background:var(--blue);border-color:var(--blue);color:#fff;}
+.month-tab .mt-count{font-size:11px;color:var(--gray-3);margin-left:6px;}
+.month-tab.active .mt-count{color:var(--orange-md);}
+
+/* MONTH SECTION */
+.month-section{margin-bottom:34px;}
+.month-section h2{
+  font-size:16px;font-weight:900;color:var(--blue);margin-bottom:14px;
+  display:flex;align-items:center;gap:10px;
+}
+.month-section h2::before{content:'';width:4px;height:18px;border-radius:2px;background:var(--orange);}
+.month-section .m-sub{font-size:12px;font-weight:600;color:var(--gray-3);}
+
+/* LAW GRID */
+.law-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;}
+.law-card{
+  background:#fff;border:1px solid var(--gray-2);border-radius:var(--r-card);
+  padding:22px 22px 20px;position:relative;display:flex;flex-direction:column;
+  transition:border-color .15s,box-shadow .15s,transform .15s;
+}
+.law-card::before{content:'';position:absolute;top:0;left:0;bottom:0;width:4px;border-radius:var(--r-card) 0 0 var(--r-card);background:var(--gray-2);}
+.law-card.has-news{cursor:pointer;}
+.law-card.has-news:hover{border-color:var(--orange);box-shadow:0 6px 20px rgba(245,130,32,.13);transform:translateY(-2px);}
+.law-card.impact-high::before{background:var(--orange);}
+.law-card.impact-mid::before{background:var(--blue);}
+.law-card.impact-low::before{background:var(--gray-3);}
+
+.lc-top{display:flex;align-items:center;gap:8px;margin-bottom:12px;flex-wrap:wrap;}
+.badge{font-size:10.5px;font-weight:800;letter-spacing:.5px;padding:3px 9px;border-radius:6px;}
+.badge.law{background:var(--orange-lt);color:#B45309;}
+.badge.decree{background:var(--blue-lt);color:var(--blue);}
+.badge.rule{background:var(--gray-2);color:var(--gray-4);}
+.badge.rev{background:#fff;border:1px solid var(--gray-2);color:var(--gray-4);}
+.impact-pill{margin-left:auto;font-size:10px;font-weight:800;padding:3px 9px;border-radius:20px;}
+.impact-pill.high{background:var(--orange);color:#fff;}
+.impact-pill.mid{background:var(--blue);color:#fff;}
+.impact-pill.low{background:var(--gray-2);color:var(--gray-4);}
+
+.lc-name{font-size:16.5px;font-weight:800;color:var(--blue);line-height:1.4;margin-bottom:6px;}
+.lc-no{font-size:11px;color:var(--gray-3);margin-bottom:12px;}
+.lc-summary{font-size:13px;color:var(--gray-4);line-height:1.65;margin-bottom:14px;flex:1;}
+
+.lc-dates{display:flex;gap:18px;margin-bottom:14px;}
+.lc-date{font-size:11px;}
+.lc-date .dl{color:var(--gray-3);display:block;margin-bottom:2px;font-weight:600;}
+.lc-date .dv{color:var(--blue);font-weight:800;font-size:13px;}
+.lc-date .dv.hi{color:var(--orange);}
+
+.lc-tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px;}
+.tag{font-size:10.5px;color:var(--gray-4);background:var(--gray-1);border:1px solid var(--gray-2);border-radius:6px;padding:3px 8px;}
+
+.lc-foot{display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--gray-2);padding-top:14px;margin-top:auto;}
+.lc-foot .ministry{font-size:11px;color:var(--gray-3);}
+.news-btn{
+  display:inline-flex;align-items:center;gap:7px;background:var(--orange);color:#fff;
+  font-size:12.5px;font-weight:800;border:none;border-radius:8px;padding:9px 15px;cursor:pointer;
+  text-decoration:none;transition:background .15s,transform .15s;
+}
+.news-btn:hover{background:#e0741a;transform:translateX(2px);}
+.news-btn .arr{transition:transform .15s;}
+.law-card.has-news:hover .news-btn .arr{transform:translateX(3px);}
+.news-soon{font-size:11.5px;font-weight:700;color:var(--gray-3);background:var(--gray-1);border:1px dashed var(--gray-3);border-radius:8px;padding:8px 14px;}
+
+footer{max-width:1040px;margin:40px auto 0;border-top:1px solid var(--gray-2);padding-top:18px;
+  display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;font-size:11px;color:var(--gray-3);}
+footer strong{color:var(--blue);}
+
+@media(max-width:720px){
+  .stats{grid-template-columns:repeat(2,1fr);}
+  .law-grid{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="page-header">
+    <div>
+      <div class="eyebrow">Monthly Law Update · 월간 제·개정 현황</div>
+      <h1 id="dash-title">월간 법령 제·개정 현황</h1>
+    </div>
+    <div class="header-right">
+      <strong id="team-name">미래에셋생명 법무팀</strong><br>
+      <span id="updated">—</span> 기준<br>
+      <a href="../index.html">← 법령 모니터로</a>
+    </div>
+  </div>
+
+  <div class="stats" id="stats"></div>
+  <div class="month-tabs" id="month-tabs"></div>
+  <div id="sections"></div>
+
+</div>
+
+<footer>
+  <strong>미래에셋생명 법무팀</strong>
+  <span>본 자료는 사내 교육·공유 목적으로 제작되었습니다 · 주요 법령을 클릭하면 카드뉴스가 새 창에서 열립니다 · 법적 효력 판단은 반드시 원문을 확인하세요.</span>
+</footer>
+
+<script>
+const typeClass = (t) => t === '법률' ? 'law' : (t.includes('령') && !t.includes('규칙') ? 'decree' : 'rule');
+const impactLabel = { high:'영향 큼', mid:'영향 보통', low:'참고' };
+
+function fmtDate(d){
+  if(!d) return '미정';
+  const [y,m,day] = d.split('-');
+  return `${y}. ${+m}. ${+day}.`;
+}
+
+function lawCard(item){
+  const hasNews = !!item.cardnews;
+  const tags = (item.tags||[]).map(t=>`<span class="tag">#${t}</span>`).join('');
+  const news = hasNews
+    ? `<a class="news-btn" href="${item.cardnews}" target="_blank" rel="noopener"
+         onclick="event.stopPropagation()">📰 카드뉴스 보기 <span class="arr">→</span></a>`
+    : `<span class="news-soon">카드뉴스 준비중</span>`;
+  const onclick = hasNews
+    ? `onclick="window.open('${item.cardnews}','_blank','noopener')"` : '';
+  return `
+  <div class="law-card impact-${item.impact} ${hasNews?'has-news':''}" ${onclick}>
+    <div class="lc-top">
+      <span class="badge ${typeClass(item.lawType)}">${item.lawType}</span>
+      <span class="badge rev">${item.revisionType}</span>
+      <span class="impact-pill ${item.impact}">${impactLabel[item.impact]||''}</span>
+    </div>
+    <div class="lc-name">${item.name}</div>
+    <div class="lc-no">${item.promulgationNo||''}</div>
+    <div class="lc-summary">${item.summary||''}</div>
+    <div class="lc-dates">
+      <div class="lc-date"><span class="dl">공포일</span><span class="dv">${fmtDate(item.promulgationDate)}</span></div>
+      <div class="lc-date"><span class="dl">시행일</span><span class="dv hi">${fmtDate(item.enforcementDate)}</span></div>
+    </div>
+    <div class="lc-tags">${tags}</div>
+    <div class="lc-foot">
+      <span class="ministry">🏛 ${item.ministry||''}</span>
+      ${news}
+    </div>
+  </div>`;
+}
+
+function render(data){
+  document.getElementById('dash-title').textContent = data.title;
+  document.getElementById('team-name').textContent = data.team;
+  document.getElementById('updated').textContent = fmtDate(data.updatedAt);
+
+  const all = data.months.flatMap(m=>m.items);
+  const total = all.length;
+  const newsCount = all.filter(i=>i.cardnews).length;
+  const lawCnt = all.filter(i=>i.lawType==='법률').length;
+  const decreeCnt = all.filter(i=>i.lawType.includes('령')&&!i.lawType.includes('규칙')).length;
+
+  document.getElementById('stats').innerHTML = `
+    <div class="stat"><div class="s-num">${total}<small>건</small></div><div class="s-label">집계 제·개정 법령</div></div>
+    <div class="stat"><div class="s-num">${lawCnt}<small>건</small></div><div class="s-label">법률 개정</div></div>
+    <div class="stat"><div class="s-num">${decreeCnt}<small>건</small></div><div class="s-label">시행령 개정</div></div>
+    <div class="stat accent"><div class="s-num">${newsCount}<small>건</small></div><div class="s-label">카드뉴스 발행</div></div>`;
+
+  const tabs = ['<button class="month-tab active" data-month="all">전체</button>']
+    .concat(data.months.map(m=>`<button class="month-tab" data-month="${m.month}">${m.label}<span class="mt-count">${m.items.length}</span></button>`));
+  document.getElementById('month-tabs').innerHTML = tabs.join('');
+
+  const sections = document.getElementById('sections');
+  function draw(filter){
+    sections.innerHTML = data.months
+      .filter(m=>filter==='all'||m.month===filter)
+      .map(m=>`
+        <div class="month-section">
+          <h2>${m.label} <span class="m-sub">· ${m.items.length}건${m.items.filter(i=>i.cardnews).length?` · 카드뉴스 ${m.items.filter(i=>i.cardnews).length}건`:''}</span></h2>
+          <div class="law-grid">${m.items.map(lawCard).join('')}</div>
+        </div>`).join('');
+  }
+  draw('all');
+
+  document.querySelectorAll('.month-tab').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      document.querySelectorAll('.month-tab').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      draw(btn.dataset.month);
+    });
+  });
+}
+
+fetch('./manifest.json',{cache:'no-cache'})
+  .then(r=>r.json())
+  .then(render)
+  .catch(e=>{
+    document.getElementById('sections').innerHTML =
+      '<p style="color:#D93025;font-size:13px;">manifest.json을 불러오지 못했습니다. 로컬에서 열 때는 정적 서버(python3 -m http.server)로 실행하세요.</p>';
+    console.error(e);
+  });
+</script>
+</body>
+</html>
