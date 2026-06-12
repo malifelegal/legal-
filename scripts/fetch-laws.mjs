@@ -1,8 +1,10 @@
-// 법령 공포/시행 사항 수집 — 최근 공포된 법령 목록을 받아 정규화한다.
+// 법령 공포/시행 사항 수집 — 향후 시행 예정 법령 목록을 받아 정규화한다.
 // 출처: 국가법령정보 공동활용 OpenAPI (target=law, sort=ddes → 공포일 내림차순)
 import { drf, asArray, fmtDate, lawLinks } from './lib/lawgo.mjs';
 
-const DISPLAY = Number(process.env.LAWS_DISPLAY || 100);
+const DISPLAY = Number(process.env.LAWS_DISPLAY || 300);
+// 시행일이 향후 며칠 이내인 법령만 남길지 (기본 30일 = 약 1개월)
+const UPCOMING_DAYS = Number(process.env.LAWS_UPCOMING_DAYS || 30);
 
 /** DRF 1개 항목 -> 사이트용 정규화 객체 */
 function normalize(row) {
@@ -32,6 +34,22 @@ function normalize(row) {
   };
 }
 
+/** 'YYYY-MM-DD' 시행일이 오늘 ~ (오늘+UPCOMING_DAYS) 사이인지 */
+function isUpcoming(dateStr) {
+  if (!dateStr) return false;
+  const d = new Date(dateStr);
+  if (Number.isNaN(d.getTime())) return false;
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const limit = new Date(today);
+  limit.setDate(limit.getDate() + UPCOMING_DAYS);
+
+  // 오늘 이후(오늘 포함) ~ 향후 UPCOMING_DAYS 이내
+  return d >= today && d <= limit;
+}
+
 export async function fetchLaws() {
   const json = await drf('lawSearch', {
     target: 'law',
@@ -44,9 +62,11 @@ export async function fetchLaws() {
   const items = rows
     .map(normalize)
     .filter((x) => x.id && x.name)
-    // 공포일 최신순 정렬 (API가 보장하지만 한 번 더 안정화)
+    // 시행일이 향후 UPCOMING_DAYS 이내인 법령만
+    .filter((x) => isUpcoming(x.enforcementDate))
+    // 시행일 빠른 순(가까운 시행일부터) 정렬
     .sort((a, b) =>
-      String(b.promulgationDate || '').localeCompare(String(a.promulgationDate || ''))
+      String(a.enforcementDate || '').localeCompare(String(b.enforcementDate || ''))
     );
 
   return items;
