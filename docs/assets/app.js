@@ -5,7 +5,7 @@ const state = {
   tab: 'laws',
   query: '',
   filter: null, // {key, value}
-  ministry: null, // 선택된 소관부처(대표부처) — null이면 전체
+  ministries: [], // 선택된 소관부처(대표부처) 배열 — 비어있으면 전체
   groupByMinistry: true, // 부처별 그룹 표시 on/off
   laws: [],
   bills: [],
@@ -149,8 +149,10 @@ function applyFilter(items) {
         if (!lawTypeMatches(v, state.filter.value)) return false;
       } else if (v !== state.filter.value) return false;
     }
-    // 소관부처(대표부처) 필터
-    if (state.ministry && primaryMinistry(x.ministry) !== state.ministry) return false;
+    // 소관부처(대표부처) 복수 필터 — 선택된 부처 중 하나라도 일치하면 통과
+    if (state.ministries.length > 0 && !state.ministries.includes(primaryMinistry(x.ministry))) {
+      return false;
+    }
     return true;
   });
 }
@@ -183,7 +185,7 @@ function buildFilters() {
     )
     .join('');
 
-  // 2줄: 소관부처 필터 (데이터에 존재하는 부처만, 건수 많은 순)
+  // 2줄: 소관부처 복수 필터 (데이터에 존재하는 부처만, 건수 많은 순)
   const counts = {};
   state.laws.forEach((x) => {
     const m = primaryMinistry(x.ministry);
@@ -191,16 +193,24 @@ function buildFilters() {
   });
   const ministries = Object.keys(counts).sort((a, b) => counts[b] - counts[a]);
 
+  const sel = state.ministries;
+  const allActive = sel.length === 0;
   const minChips =
-    `<button class="chip ${state.ministry === null ? 'is-active' : ''}" data-ministry="">전체 부처</button>` +
+    `<button class="chip ${allActive ? 'is-active' : ''}" data-ministry-all="1">전체 부처</button>` +
     ministries
       .map(
         (m) =>
-          `<button class="chip ${state.ministry === m ? 'is-active' : ''}" data-ministry="${esc(
+          `<button class="chip ${sel.includes(m) ? 'is-active' : ''}" data-ministry="${esc(
             m
-          )}">${esc(m)} <span class="chip-count">${counts[m]}</span></button>`
+          )}">${sel.includes(m) ? '✓ ' : ''}${esc(m)} <span class="chip-count">${counts[m]}</span></button>`
       )
       .join('');
+
+  // 선택 요약 + 해제 (복수 선택 시)
+  const selInfo =
+    sel.length > 0
+      ? `<button class="chip clear" data-ministry-clear="1">선택 ${sel.length}개 해제 ✕</button>`
+      : '';
 
   // 3줄: 부처별 그룹 표시 토글
   const groupToggle = `<button class="chip toggle ${
@@ -210,7 +220,7 @@ function buildFilters() {
   box.innerHTML = `
     <div class="filter-row">${typeChips}</div>
     <div class="filter-row filter-ministry">${minChips}</div>
-    <div class="filter-row">${groupToggle}</div>
+    <div class="filter-row">${selInfo}${groupToggle}</div>
   `;
 }
 
@@ -256,7 +266,6 @@ function renderGrouped(items) {
     const m = primaryMinistry(x.ministry);
     (groups[m] = groups[m] || []).push(x);
   });
-  // 건수 많은 부처부터
   const order = Object.keys(groups).sort((a, b) => groups[b].length - groups[a].length);
 
   return order
@@ -294,7 +303,7 @@ function bindEvents() {
     t.addEventListener('click', () => {
       state.tab = t.dataset.tab;
       state.filter = null;
-      state.ministry = null;
+      state.ministries = [];
       render();
     })
   );
@@ -314,10 +323,18 @@ function bindEvents() {
       render();
       return;
     }
-    // 소관부처 필터
+    // 전체 부처 (선택 해제)
+    if (btn.dataset.ministryAll || btn.dataset.ministryClear) {
+      state.ministries = [];
+      render();
+      return;
+    }
+    // 소관부처 복수 토글
     if (btn.hasAttribute('data-ministry')) {
-      const m = btn.dataset.ministry || null;
-      state.ministry = m;
+      const m = btn.dataset.ministry;
+      const i = state.ministries.indexOf(m);
+      if (i >= 0) state.ministries.splice(i, 1); // 이미 선택됨 → 해제
+      else state.ministries.push(m); // 새로 선택
       render();
       return;
     }
