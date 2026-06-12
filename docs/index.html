@@ -8,7 +8,7 @@
       name="description"
       content="법제처 입법예고·법령 공포/시행 사항을 한눈에. 주요 내용 요약과 첨부파일(제개정문·신구조문대비표) 바로보기·다운로드."
     />
-    <link rel="stylesheet" href="./assets/styles.css" />
+    <link rel="stylesheet" href="./assets/styles.css?v=3" />
   </head>
   <body>
     <header class="topbar">
@@ -28,6 +28,9 @@
       <button class="tab is-active" data-tab="laws" role="tab">
         📜 법령 공포·시행 <span class="count" id="count-laws">0</span>
       </button>
+      <button class="tab" data-tab="featured" role="tab">
+        ⭐ 주요 법령 <span class="count" id="count-featured">0</span>
+      </button>
       <button class="tab" data-tab="bills" role="tab">
         📝 정부입법예고 <span class="count" id="count-bills">0</span>
       </button>
@@ -43,10 +46,46 @@
       <div class="filters" id="filters"></div>
     </section>
 
+    <!-- 선택 모드 안내 바 (법령 탭에서 체크 선택 시 노출) -->
+    <section class="wrap selectbar" id="selectbar" hidden>
+      <span class="selectbar-info">선택한 <b id="sel-count">0</b>건을 주요 법령으로 내보낼 수 있습니다.</span>
+      <div class="selectbar-actions">
+        <button class="btn-sel ghost" id="sel-clear">선택 해제</button>
+        <button class="btn-sel primary" id="sel-export">선택 목록 내보내기</button>
+      </div>
+    </section>
+
     <main class="wrap">
       <div id="panel-laws" class="panel is-active"></div>
+      <div id="panel-featured" class="panel"></div>
       <div id="panel-bills" class="panel"></div>
     </main>
+
+    <!-- 내보내기 모달 -->
+    <div class="modal" id="export-modal" hidden>
+      <div class="modal-box">
+        <div class="modal-head">
+          <h3>주요 법령 내보내기</h3>
+          <button class="modal-close" id="modal-close">✕</button>
+        </div>
+        <p class="modal-desc">
+          아래 내용을 복사해서 <code>docs/data/featured.json</code> 에 붙여넣고 커밋하면,
+          모두에게 <b>주요 법령</b> 탭으로 공유됩니다.
+        </p>
+        <textarea id="export-text" readonly></textarea>
+        <div class="modal-actions">
+          <button class="btn-sel primary" id="export-copy">복사하기</button>
+        </div>
+        <div class="modal-guide">
+          <ol>
+            <li>위 <b>복사하기</b> 클릭</li>
+            <li>GitHub 저장소 → <code>docs/data/featured.json</code> 열기 → 연필(✏️)</li>
+            <li>전체 선택 후 삭제 → 붙여넣기 → <b>Commit changes</b></li>
+            <li>1~2분 뒤 사이트 새로고침 → 주요 법령 탭에 반영</li>
+          </ol>
+        </div>
+      </div>
+    </div>
 
     <footer class="wrap foot">
       <p>
@@ -58,6 +97,6 @@
       </p>
     </footer>
 
-    <script src="./assets/app.js"></script>
+    <script src="./assets/app.js?v=3"></script>
   </body>
 </html>
