@@ -203,3 +203,62 @@ main { margin: 20px auto 40px; }
   .meta { text-align: left; }
   .topbar h1 { font-size: 19px; }
 }
+/* ---- 필터 줄 (법령구분 / 부처 / 토글) ---- */
+.filters { flex-direction: column; align-items: stretch; gap: 8px; width: 100%; }
+.filter-row { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+.filter-ministry {
+  max-height: 96px;
+  overflow-y: auto;
+  padding: 2px;
+  border: 1px dashed var(--line);
+  border-radius: 10px;
+}
+.filter-ministry::-webkit-scrollbar { height: 6px; width: 6px; }
+.filter-ministry::-webkit-scrollbar-thumb { background: var(--line); border-radius: 6px; }
+
+.chip-count {
+  display: inline-block;
+  margin-left: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--muted);
+  background: #eef1f6;
+  border-radius: 999px;
+  padding: 0 6px;
+}
+.chip.is-active .chip-count { background: rgba(31, 78, 121, 0.15); color: var(--brand); }
+
+.chip.toggle { font-weight: 600; }
+.chip.toggle.is-active {
+  background: var(--brand);
+  color: #fff;
+  border-color: var(--brand);
+}
+
+/* ---- 부처별 그룹 ---- */
+.ministry-group { display: grid; gap: 14px; }
+.ministry-group + .ministry-group { margin-top: 10px; }
+.ministry-title {
+  margin: 6px 0 0;
+  font-size: 14px;
+  font-weight: 700;
+  color: #555f73;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  background: #f0f0f5;
+  border-radius: 8px;
+  border-left: 3px solid #555f73;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+.ministry-count {
+  font-size: 12px;
+  font-weight: 700;
+  color: #fff;
+  background: #8b94a7;
+  border-radius: 999px;
+  padding: 1px 9px;
+}
