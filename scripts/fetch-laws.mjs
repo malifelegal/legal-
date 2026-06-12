@@ -3,8 +3,8 @@
 import { drf, asArray, fmtDate, lawLinks } from './lib/lawgo.mjs';
 
 const DISPLAY = Number(process.env.LAWS_DISPLAY || 300);
-// 시행일이 향후 며칠 이내인 법령만 남길지 (기본 30일 = 약 1개월)
-const UPCOMING_DAYS = Number(process.env.LAWS_UPCOMING_DAYS || 30);
+// 공포일이 최근 며칠 이내인 법령만 남길지 (기본 30일 = 약 1개월)
+const RECENT_DAYS = Number(process.env.LAWS_RECENT_DAYS || 30);
 
 /** DRF 1개 항목 -> 사이트용 정규화 객체 */
 function normalize(row) {
@@ -34,20 +34,21 @@ function normalize(row) {
   };
 }
 
-/** 'YYYY-MM-DD' 시행일이 오늘 ~ (오늘+UPCOMING_DAYS) 사이인지 */
-function isUpcoming(dateStr) {
+/** 'YYYY-MM-DD' 공포일이 (오늘-RECENT_DAYS) ~ 오늘 사이인지 */
+function isRecentlyPromulgated(dateStr) {
   if (!dateStr) return false;
   const d = new Date(dateStr);
   if (Number.isNaN(d.getTime())) return false;
 
   const today = new Date();
-  today.setHours(0, 0, 0, 0);
+  today.setHours(23, 59, 59, 999);
 
-  const limit = new Date(today);
-  limit.setDate(limit.getDate() + UPCOMING_DAYS);
+  const from = new Date(today);
+  from.setDate(from.getDate() - RECENT_DAYS);
+  from.setHours(0, 0, 0, 0);
 
-  // 오늘 이후(오늘 포함) ~ 향후 UPCOMING_DAYS 이내
-  return d >= today && d <= limit;
+  // 최근 RECENT_DAYS 이내 공포 (오늘 포함)
+  return d >= from && d <= today;
 }
 
 export async function fetchLaws() {
@@ -62,11 +63,11 @@ export async function fetchLaws() {
   const items = rows
     .map(normalize)
     .filter((x) => x.id && x.name)
-    // 시행일이 향후 UPCOMING_DAYS 이내인 법령만
-    .filter((x) => isUpcoming(x.enforcementDate))
-    // 시행일 빠른 순(가까운 시행일부터) 정렬
+    // 공포일이 최근 RECENT_DAYS 이내인 법령만
+    .filter((x) => isRecentlyPromulgated(x.promulgationDate))
+    // 공포일 최신순(가장 최근 공포부터) 정렬
     .sort((a, b) =>
-      String(a.enforcementDate || '').localeCompare(String(b.enforcementDate || ''))
+      String(b.promulgationDate || '').localeCompare(String(a.promulgationDate || ''))
     );
 
   return items;

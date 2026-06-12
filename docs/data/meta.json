@@ -1,12 +1,11 @@
 {
-  "updatedAt": "2026-06-11T08:07:33.521Z",
-  "seed": true,
+  "updatedAt": "2026-06-12T00:00:00.000Z",
   "oc": "tjf***",
   "sources": {
     "laws": {
       "ok": true,
-      "count": 6,
-      "note": "초기 시드(MCP 확인 데이터)"
+      "count": 217,
+      "note": "최근 공포 법령 (수동 갱신)"
     },
     "bills": {
       "ok": true,

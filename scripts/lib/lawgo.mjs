@@ -3,8 +3,9 @@
 // (GitHub Actions 러너)에서만 실행된다.
 
 // OC 인증키: open.law.go.kr 에 등록한 사용자 ID.
-// 환경변수 LAW_OC 로 덮어쓸 수 있으며, 없으면 아래 기본값을 사용한다.
-export const OC = process.env.LAW_OC || 'tjfghk1548';
+// 반드시 환경변수 LAW_OC 로 주입한다(소스에 키를 하드코딩하지 않는다).
+// law.go.kr OpenAPI 는 등록 IP 에서만 응답하므로 등록 IP(로컬)에서 실행할 것.
+export const OC = process.env.LAW_OC || '';
 
 const DRF_BASE = 'https://www.law.go.kr/DRF';
 
@@ -28,6 +29,12 @@ export function asArray(v) {
  * @param {Record<string,string|number>} params
  */
 export async function drf(kind, params) {
+  if (!OC) {
+    throw new Error(
+      'LAW_OC 환경변수가 설정되지 않았습니다. open.law.go.kr 에 등록한 OC(사용자 ID)를 ' +
+        'LAW_OC 로 주입한 뒤 등록 IP 에서 실행하세요. (예: LAW_OC=발급받은OC node fetch.mjs)'
+    );
+  }
   const qs = new URLSearchParams({ OC, type: 'JSON', ...params });
   const url = `${DRF_BASE}/${kind}.do?${qs.toString()}`;
 

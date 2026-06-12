@@ -2,9 +2,12 @@
 name: Deploy static content to Pages
 
 on:
-  # Runs on pushes targeting the default branch
+  # Runs on pushes targeting the default branch (docs/ 변경 시에만)
   push:
     branches: ["main"]
+    paths:
+      - "docs/**"
+      - ".github/workflows/static.yml"
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -36,7 +39,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          # Upload entire repository
+          # 정적 사이트 루트는 docs/ 폴더
           path: './docs'
       - name: Deploy to GitHub Pages
         id: deployment
