@@ -304,7 +304,7 @@ function renderGrouped(items, selectable) {
       const cards = groups[m]
         .slice()
         .sort((a, b) =>
-          String(a.enforcementDate || '').localeCompare(String(b.enforcementDate || ''))
+          String(b.promulgationDate || '').localeCompare(String(a.promulgationDate || ''))
         )
         .map((x) => lawCard(x, selectable))
         .join('');
