@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>개인정보 보호법 시행령 카드뉴스 | 미래에셋생명 법무팀</title>
+<style>
+/*
+ * 미래에셋생명 법무팀 — 법령 제·개정 카드뉴스 디자인 시스템
+ * 이 파일을 HTML <style> 태그 안에 그대로 삽입한다.
+ * 색상·여백·타이포그래피를 임의로 바꾸지 말 것.
+ */
+
+:root {
+  --orange:     #F58220;
+  --orange-lt:  #FEF0E3;
+  --orange-md:  #FDDCBA;
+  --blue:       #043B72;
+  --blue-lt:    #E8EFF7;
+  --gray-1:     #F7F8FA;
+  --gray-2:     #ECEFF4;
+  --gray-3:     #A0A6A8;
+  --gray-4:     #5A6370;
+  --text:       #1A1E23;
+  --red:        #D93025;
+  --r-card:     16px;
+  --r-sm:       10px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Apple SD Gothic Neo','Malgun Gothic','Noto Sans KR',sans-serif;
+  background: var(--gray-1);
+  padding: 48px 32px 64px;
+  color: var(--text);
+}
+.page-header {
+  max-width: 960px; margin: 0 auto 36px;
+  border-bottom: 2px solid var(--orange);
+  padding-bottom: 16px;
+  display: flex; align-items: flex-end;
+  justify-content: space-between; gap: 16px; flex-wrap: wrap;
+}
+.eyebrow { font-size:10px; font-weight:800; letter-spacing:3px; color:var(--orange); text-transform:uppercase; margin-bottom:5px; }
+.page-header h1 { font-size:24px; font-weight:900; color:var(--blue); line-height:1.25; }
+.header-right { font-size:11.5px; color:var(--gray-3); line-height:1.75; text-align:right; }
+.header-right strong { color:var(--blue); }
+.layout {
+  max-width: 960px; margin: 0 auto;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 18px;
+}
+.card {
+  background: #fff; border-radius: var(--r-card);
+  border: 1px solid var(--gray-2); padding: 28px 26px 26px;
+  position: relative; overflow: hidden; display: flex; flex-direction: column;
+}
+.card::before { content:''; position:absolute; top:0; left:0; right:0; height:4px; background:var(--orange); }
+.card-tag { font-size:10px; font-weight:800; letter-spacing:2.5px; text-transform:uppercase; color:var(--orange); margin-bottom:6px; }
+.card-num { position:absolute; top:16px; right:20px; font-size:48px; font-weight:900; color:var(--gray-2); line-height:1; letter-spacing:-2px; }
+.card h3 { font-size:17px; font-weight:800; color:var(--blue); line-height:1.4; margin-bottom:18px; }
+.row-full { grid-column: 1 / -1; }
+/* COVER */
+.card-cover { background:var(--blue); border-color:var(--blue); }
+.card-cover::before { background:var(--orange); }
+.card-cover .card-tag { color:var(--orange); }
+.card-cover h2 { font-size:22px; font-weight:900; color:#fff; line-height:1.4; margin:10px 0 16px; }
+.card-cover h2 em { color:var(--orange); font-style:normal; }
+.cover-desc { font-size:13px; color:rgba(255,255,255,0.6); line-height:1.7; margin-bottom:20px; flex:1; }
+.law-chips { display:flex; flex-direction:column; gap:8px; }
+.law-chip { background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.13); border-radius:var(--r-sm); padding:10px 14px; display:flex; align-items:center; justify-content:space-between; gap:8px; }
+.chip-label { font-size:11px; color:rgba(255,255,255,0.48); }
+.chip-val { font-size:13px; font-weight:700; color:#fff; }
+.chip-val.hi { color:var(--orange); }
+/* REASON LIST */
+.reason-list { list-style:none; flex:1; display:flex; flex-direction:column; justify-content:space-between; }
+.reason-list li { display:flex; align-items:flex-start; gap:12px; padding:12px 0; border-bottom:1px solid var(--gray-2); font-size:13px; color:var(--gray-4); line-height:1.6; }
+.reason-list li:last-child { border-bottom:none; }
+.ri { width:28px; height:28px; border-radius:8px; background:var(--orange-lt); display:flex; align-items:center; justify-content:center; font-size:14px; flex-shrink:0; margin-top:1px; }
+/* CHANGES */
+.changes-list { flex:1; display:flex; flex-direction:column; justify-content:space-between; }
+.ci { display:flex; align-items:flex-start; gap:12px; padding:11px 0; border-bottom:1px solid var(--gray-2); }
+.ci:last-child { border-bottom:none; }
+.sn { width:24px; height:24px; border-radius:50%; background:var(--orange); color:#fff; font-size:11px; font-weight:800; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:2px; }
+.ci strong { display:block; font-size:13px; font-weight:700; color:var(--blue); margin-bottom:2px; }
+.ci span { font-size:12px; color:var(--gray-4); line-height:1.5; }
+/* PENALTY */
+.card-penalty::before { background:var(--red); }
+.card-penalty .card-tag, .card-penalty h3 { color:var(--red); }
+.penalty-hero { background:linear-gradient(135deg,#FFF1F0,#FFE4E2); border:1px solid #FFCBC7; border-radius:14px; padding:18px; text-align:center; margin-bottom:16px; }
+.pct { font-size:54px; font-weight:900; color:var(--red); line-height:1; }
+.pct span { font-size:22px; }
+.pct-label { font-size:12px; color:#8B3A35; margin-top:5px; line-height:1.55; }
+.pct-label strong { color:var(--red); }
+.cond-row { display:flex; align-items:flex-start; gap:10px; font-size:12.5px; color:var(--gray-4); padding:9px 0; border-bottom:1px solid var(--gray-2); line-height:1.55; }
+.cond-row:last-of-type { border-bottom:none; }
+.rdot { width:6px; height:6px; border-radius:50%; background:var(--red); flex-shrink:0; margin-top:6px; }
+.miti { margin-top:14px; background:var(--blue-lt); border-left:3px solid var(--blue); border-radius:0 var(--r-sm) var(--r-sm) 0; padding:11px 14px; font-size:12px; color:var(--blue); line-height:1.65; }
+.miti strong { font-weight:800; }
+/* TIMELINE */
+.timeline { position:relative; padding-left:22px; flex:1; }
+.timeline::before { content:''; position:absolute; left:5px; top:8px; bottom:8px; width:2px; background:linear-gradient(to bottom, var(--orange), var(--gray-2)); }
+.tl-item { position:relative; padding-bottom:18px; }
+.tl-item:last-child { padding-bottom:0; }
+.tl-dot { position:absolute; left:-18px; top:4px; width:12px; height:12px; border-radius:50%; background:var(--orange-md); border:2px solid var(--orange); }
+.tl-dot.key { background:var(--orange); border-color:var(--blue); width:14px; height:14px; left:-19px; top:3px; }
+.tl-date { font-size:10.5px; font-weight:700; color:var(--gray-3); margin-bottom:2px; }
+.tl-date.k { color:var(--orange); }
+.tl-label { font-size:14px; font-weight:800; color:var(--blue); margin-bottom:2px; }
+.tl-desc { font-size:11.5px; color:var(--gray-4); line-height:1.55; }
+.kbadge { display:inline-block; background:var(--orange); color:#fff; font-size:9px; font-weight:800; padding:2px 7px; border-radius:20px; margin-left:6px; vertical-align:middle; }
+/* DECREE DETAILS */
+.it-list { flex:1; display:flex; flex-direction:column; justify-content:space-between; }
+.it-item { padding:13px 0; border-bottom:1px solid var(--gray-2); }
+.it-item:last-child { border-bottom:none; }
+.it-num-label { display:flex; align-items:center; gap:8px; margin-bottom:6px; }
+.it-circle { width:22px; height:22px; border-radius:50%; background:var(--blue); color:#fff; font-size:10px; font-weight:800; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.it-item strong { font-size:13px; font-weight:700; color:var(--blue); }
+.it-item p { font-size:12px; color:var(--gray-4); line-height:1.6; padding-left:30px; }
+/* ACTION PLAN */
+.action-intro { font-size:13px; color:var(--gray-4); line-height:1.6; margin-bottom:18px; }
+.action-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; }
+.ai { background:var(--gray-1); border:1px solid var(--gray-2); border-radius:var(--r-sm); padding:16px; }
+.ai .an { width:28px; height:28px; border-radius:8px; background:var(--blue); color:#fff; font-size:12px; font-weight:900; display:flex; align-items:center; justify-content:center; margin-bottom:10px; }
+.ai strong { display:block; font-size:13px; font-weight:800; color:var(--blue); margin-bottom:6px; line-height:1.4; }
+.ai p { font-size:12px; color:var(--gray-4); line-height:1.6; }
+.deadline-bar { margin-top:18px; background:var(--orange-lt); border:1px solid var(--orange-md); border-radius:var(--r-sm); padding:12px 18px; display:flex; align-items:center; gap:12px; font-size:13px; color:var(--blue); }
+.deadline-bar .di { font-size:18px; flex-shrink:0; }
+.deadline-bar strong { color:var(--orange); font-weight:800; }
+/* SOURCE DOCS */
+.card-refs::before { background:var(--blue); }
+.card-refs .card-tag, .card-refs h3 { color:var(--blue); }
+.refs-desc { font-size:12.5px; color:var(--gray-4); margin-bottom:18px; line-height:1.6; }
+.refs-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.ref-group { background:var(--gray-1); border:1px solid var(--gray-2); border-radius:var(--r-sm); padding:16px 18px; }
+.ref-group-label { font-size:10.5px; font-weight:800; letter-spacing:1.5px; color:var(--gray-3); text-transform:uppercase; margin-bottom:10px; display:flex; align-items:center; gap:7px; }
+.ref-group-label::before { content:""; display:inline-block; width:3px; height:13px; border-radius:2px; background:var(--blue); }
+.ref-group.law-act .ref-group-label::before { background:var(--orange); }
+.ref-links { display:flex; flex-direction:column; gap:8px; }
+.ref-link { display:flex; align-items:center; justify-content:space-between; background:#fff; border:1px solid var(--gray-2); border-radius:8px; padding:11px 14px; text-decoration:none; color:inherit; transition:border-color .15s,box-shadow .15s; }
+.ref-link:hover { border-color:var(--blue); box-shadow:0 2px 8px rgba(4,59,114,.10); }
+.ref-group.law-act .ref-link:hover { border-color:var(--orange); box-shadow:0 2px 8px rgba(245,130,32,.12); }
+.ref-link-inner { display:flex; align-items:center; gap:10px; }
+.ref-icon { width:32px; height:32px; border-radius:8px; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:15px; background:var(--blue-lt); }
+.ref-group.law-act .ref-icon { background:var(--orange-lt); }
+.ref-text strong { display:block; font-size:13px; font-weight:700; color:var(--blue); margin-bottom:2px; }
+.ref-group.law-act .ref-text strong { color:#B45309; }
+.ref-text span { font-size:11px; color:var(--gray-3); }
+.ref-arrow { font-size:14px; color:var(--gray-3); flex-shrink:0; transition:transform .15s,color .15s; }
+.ref-link:hover .ref-arrow { transform:translateX(3px); color:var(--blue); }
+.ref-group.law-act .ref-link:hover .ref-arrow { color:var(--orange); }
+.refs-note { margin-top:14px; background:var(--blue-lt); border-left:3px solid var(--blue); border-radius:0 var(--r-sm) var(--r-sm) 0; padding:10px 14px; font-size:11.5px; color:var(--blue); line-height:1.65; }
+/* CALLOUT */
+.callout { background:var(--orange-lt); border-left:3px solid var(--orange); border-radius:0 var(--r-sm) var(--r-sm) 0; padding:11px 14px; font-size:12px; color:#7A4A00; line-height:1.65; margin-top:14px; }
+.callout strong { font-weight:800; color:var(--orange); }
+/* FOOTER */
+footer { max-width:960px; margin:32px auto 0; border-top:1px solid var(--gray-2); padding-top:16px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px; font-size:11px; color:var(--gray-3); }
+footer strong { color:var(--blue); }
+
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <div>
+    <div class="eyebrow">Law Update · 법령 제·개정 안내</div>
+    <h1>개인정보 보호법 시행령 개정 핵심 정리</h1>
+  </div>
+  <div class="header-right">
+    <strong>미래에셋생명 법무팀</strong><br>
+    2026. 06. 발행<br>
+    대통령령 제36121호
+  </div>
+</div>
+
+<div class="layout">
+
+  <div class="card card-cover">
+    <div class="card-tag">Overview</div>
+    <h2>개인정보 보호법 시행령,<br><em>안전조치·전송요구</em>가 구체화됩니다</h2>
+    <p class="cover-desc">안전조치 기준이 세분화되고 개인정보 전송요구권의 세부 절차가 신설됩니다. 보유 중인 고객 개인정보 관리체계 재점검이 필요합니다.</p>
+    <div class="law-chips">
+      <div class="law-chip"><span class="chip-label">시행령 시행</span><span class="chip-val hi">2026. 8. 20.</span></div>
+      <div class="law-chip"><span class="chip-label">공포일</span><span class="chip-val">2026. 5. 19.</span></div>
+      <div class="law-chip"><span class="chip-label">주요 개정사항</span><span class="chip-val">3가지</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <span class="card-num">01</span>
+    <div class="card-tag">Background · 개정 배경</div>
+    <h3>왜 시행령이 바뀌었나요?</h3>
+    <ul class="reason-list">
+      <li><div class="ri">🔒</div>대규모 개인정보 유출 사고가 반복되며 안전조치 강화 필요</li>
+      <li><div class="ri">🌐</div>개인정보 전송요구권(마이데이터) 본격 시행에 따른 절차 정비</li>
+      <li><div class="ri">⚖️</div>상위법 개정사항을 시행령에서 구체화할 필요</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <span class="card-num">02</span>
+    <div class="card-tag">Key Changes · 3대 개정</div>
+    <h3>이렇게 3가지가 달라집니다</h3>
+    <div class="changes-list">
+      <div class="ci"><div class="sn">1</div><div><strong>안전조치 기준 구체화</strong><span>접근권한 관리·암호화·접속기록 보관 등 기술적·관리적 조치를 세분화</span></div></div>
+      <div class="ci"><div class="sn">2</div><div><strong>전송요구권 절차 신설</strong><span>전송 대상 정보·방식·전송기한 등 처리 절차를 구체적으로 규정</span></div></div>
+      <div class="ci"><div class="sn">3</div><div><strong>유출통지 기준 정비</strong><span>유출 통지·신고 기준과 시한을 명확히 하고 통지 항목을 보강</span></div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <span class="card-num">03</span>
+    <div class="card-tag">Enforcement Decree · 시행령 핵심</div>
+    <h3>시행령에서 무엇이 바뀌나요?</h3>
+    <div class="it-list">
+      <div class="it-item"><div class="it-num-label"><div class="it-circle">①</div><strong>접속기록 보관·점검</strong></div><p>개인정보처리시스템 접속기록 보관기간·점검 주기를 명확화</p></div>
+      <div class="it-item"><div class="it-num-label"><div class="it-circle">②</div><strong>전송요구 처리체계</strong></div><p>고객의 전송요구를 접수·이행하는 표준 절차 마련 필요</p></div>
+      <div class="it-item"><div class="it-num-label"><div class="it-circle">③</div><strong>유출 대응 시한</strong></div><p>유출 인지 후 통지·신고까지의 시한 관리 체계 점검</p></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <span class="card-num">04</span>
+    <div class="card-tag">Schedule · 시행 일정</div>
+    <h3>언제부터 적용되나요?</h3>
+    <div class="timeline">
+      <div class="tl-item"><div class="tl-dot"></div><div class="tl-date">2026. 5. 19.</div><div class="tl-label">시행령 공포</div><div class="tl-desc">대통령령 제36121호</div></div>
+      <div class="tl-item"><div class="tl-dot key"></div><div class="tl-date k">2026. 8. 20.<span class="kbadge">D-DAY</span></div><div class="tl-label">시행</div><div class="tl-desc">전 조항 효력 발생</div></div>
+    </div>
+  </div>
+
+  <div class="card card-action row-full">
+    <div class="card-tag">Action Plan · 보험업 실무 대응</div>
+    <h3>시행 전 우리 회사가 해야 할 4가지</h3>
+    <p class="action-intro">2026. 8. 20. 시행 이전까지 아래 4가지 점검을 완료해 주시기 바랍니다.</p>
+    <div class="action-grid">
+      <div class="ai"><div class="an">1</div><strong>안전조치 점검</strong><p>접근권한·암호화·접속기록 등 강화된 기준 대비 현행 체계 점검</p></div>
+      <div class="ai"><div class="an">2</div><strong>전송요구 대응</strong><p>고객 전송요구 접수·이행 절차 및 담당 조직 정비</p></div>
+      <div class="ai"><div class="an">3</div><strong>유출 대응 체계</strong><p>유출 통지·신고 시한 관리 및 비상대응 절차 업데이트</p></div>
+      <div class="ai"><div class="an">4</div><strong>위탁사 점검</strong><p>개인정보 처리 위탁사의 안전조치 이행 여부 재확인</p></div>
+    </div>
+    <div class="deadline-bar"><span class="di">📅</span><span>체계 점검 완료 목표: <strong>2026. 8. 14.</strong> (시행 전)</span></div>
+  </div>
+
+  <div class="card card-refs row-full">
+    <div class="card-tag">Source Documents · 원문 자료</div>
+    <h3>신구조문대비표 &amp; 개정이유 원문 확인</h3>
+    <p class="refs-desc">아래 버튼을 클릭하면 국가법령정보센터 원문이 새 창에서 열립니다.</p>
+    <div class="refs-grid" style="grid-template-columns:1fr;">
+      <div class="ref-group">
+        <div class="ref-group-label">개인정보 보호법 시행령 &nbsp;|&nbsp; 대통령령 제36121호</div>
+        <div class="ref-links">
+          <a class="ref-link" href="https://www.law.go.kr/법령/개인정보보호법시행령" target="_blank" rel="noopener">
+            <div class="ref-link-inner"><div class="ref-icon">📋</div><div class="ref-text"><strong>시행령 본문 · 개정이유</strong><span>law.go.kr · 개인정보 보호법 시행령</span></div></div>
+            <span class="ref-arrow">→</span>
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="refs-note">💡 원문 링크는 국가법령정보센터(law.go.kr)로 연결됩니다.</div>
+  </div>
+
+</div>
+
+<footer>
+  <strong>미래에셋생명 법무팀</strong>
+  <span>2026. 06. 발행 &nbsp;·&nbsp; 본 자료는 사내 교육·공유 목적으로 제작되었습니다 &nbsp;·&nbsp; 문의: 법무팀</span>
+</footer>
+
+</body>
+</html>

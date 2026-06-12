@@ -1,0 +1,84 @@
+{
+  "title": "월간 법령 제·개정 현황",
+  "team": "미래에셋생명 법무팀",
+  "updatedAt": "2026-06-12",
+  "months": [
+    {
+      "month": "2026-06",
+      "label": "2026년 6월",
+      "items": [
+        {
+          "name": "보험업법",
+          "lawType": "법률",
+          "revisionType": "일부개정",
+          "ministry": "금융위원회",
+          "promulgationDate": "2026-06-03",
+          "enforcementDate": "2026-12-04",
+          "promulgationNo": "법률 제20987호",
+          "impact": "high",
+          "summary": "설명의무·부당승환계약 규제 강화 및 과징금 상한 상향. 영업·준법 전반 영향.",
+          "tags": ["설명의무", "과징금", "모집질서"],
+          "cardnews": "files/insurance-business-act.html"
+        },
+        {
+          "name": "개인정보 보호법 시행령",
+          "lawType": "대통령령",
+          "revisionType": "일부개정",
+          "ministry": "개인정보보호위원회",
+          "promulgationDate": "2026-05-19",
+          "enforcementDate": "2026-08-20",
+          "promulgationNo": "대통령령 제36121호",
+          "impact": "high",
+          "summary": "안전조치 기준 구체화·전송요구권 세부 절차 신설. 보유 개인정보 관리체계 재점검 필요.",
+          "tags": ["전송요구권", "안전조치", "유출통지"],
+          "cardnews": "files/pipa-decree.html"
+        }
+      ]
+    },
+    {
+      "month": "2026-05",
+      "label": "2026년 5월",
+      "items": [
+        {
+          "name": "자본시장과 금융투자업에 관한 법률 시행령",
+          "lawType": "대통령령",
+          "revisionType": "일부개정",
+          "ministry": "금융위원회",
+          "promulgationDate": "2026-05-26",
+          "enforcementDate": "2026-05-26",
+          "promulgationNo": "대통령령 제36140호",
+          "impact": "mid",
+          "summary": "변액보험 특별계정 운용·공시 관련 세부 기준 정비. 운용·상품 부서 확인 권장.",
+          "tags": ["변액보험", "특별계정", "공시"],
+          "cardnews": "files/capital-markets-decree.html"
+        },
+        {
+          "name": "노인장기요양보험법",
+          "lawType": "법률",
+          "revisionType": "일부개정",
+          "ministry": "보건복지부",
+          "promulgationDate": "2026-05-26",
+          "enforcementDate": "2026-11-27",
+          "promulgationNo": "법률 제20951호",
+          "impact": "low",
+          "summary": "장기요양 등급판정·급여 절차 일부 개선. 간병·요양 연계 상품 모니터링 대상.",
+          "tags": ["장기요양", "급여절차"],
+          "cardnews": null
+        },
+        {
+          "name": "산업안전보건법 시행규칙",
+          "lawType": "고용노동부령",
+          "revisionType": "일부개정",
+          "ministry": "고용노동부",
+          "promulgationDate": "2026-05-29",
+          "enforcementDate": "2026-05-29",
+          "promulgationNo": "고용노동부령 제00412호",
+          "impact": "low",
+          "summary": "사업장 안전·보건 서식 정비. 일반 사업장 관리 차원의 참고 사항.",
+          "tags": ["산업안전", "서식"],
+          "cardnews": null
+        }
+      ]
+    }
+  ]
+}
