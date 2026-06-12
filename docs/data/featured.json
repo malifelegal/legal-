@@ -1,1 +1,41 @@
-[]
+[[
+  {
+    "id": "006175",
+    "mst": "286885",
+    "name": "건설기술 진흥법 시행규칙",
+    "abbr": null,
+    "lawType": "국토교통부령",
+    "revisionType": "일부개정",
+    "ministry": "국토교통부",
+    "promulgationDate": "2026-06-11",
+    "promulgationNo": "01597",
+    "enforcementDate": "2026-06-11",
+    "links": {
+      "fullText": "https://www.law.go.kr/법령/%EA%B1%B4%EC%84%A4%EA%B8%B0%EC%88%A0%20%EC%A7%84%ED%9D%A5%EB%B2%95%20%EC%8B%9C%ED%96%89%EA%B7%9C%EC%B9%99",
+      "oldNew": "https://www.law.go.kr/LSW/lsInfoP.do?lsId=006175&lsiSeq=286885&chrClsCd=010202&viewCls=lsOldAndNew&urlMode=lsOldAndNew",
+      "reason": "https://www.law.go.kr/LSW/lsInfoP.do?lsId=006175&lsiSeq=286885&chrClsCd=010202&viewCls=lsRvsDoc&urlMode=lsRvsDoc",
+      "detail": "https://www.law.go.kr/LSW/lsInfoP.do?lsId=006175&lsiSeq=286885&efYd=&chrClsCd=010202"
+    },
+    "attachments": [
+      {
+        "label": "법령 본문",
+        "kind": "law",
+        "url": "https://www.law.go.kr/법령/%EA%B1%B4%EC%84%A4%EA%B8%B0%EC%88%A0%20%EC%A7%84%ED%9D%A5%EB%B2%95%20%EC%8B%9C%ED%96%89%EA%B7%9C%EC%B9%99",
+        "direct": false
+      },
+      {
+        "label": "신구조문대비표",
+        "kind": "oldnew",
+        "url": "https://www.law.go.kr/LSW/lsInfoP.do?lsId=006175&lsiSeq=286885&chrClsCd=010202&viewCls=lsOldAndNew&urlMode=lsOldAndNew",
+        "direct": false
+      },
+      {
+        "label": "제·개정문 / 이유",
+        "kind": "reason",
+        "url": "https://www.law.go.kr/LSW/lsInfoP.do?lsId=006175&lsiSeq=286885&chrClsCd=010202&viewCls=lsRvsDoc&urlMode=lsRvsDoc",
+        "direct": false
+      }
+    ]
+  }
+]
+]
