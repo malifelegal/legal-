@@ -23,6 +23,7 @@ export function asArray(v) {
 
 /**
  * DRF JSON 호출. target/유형에 따라 lawSearch(목록) 또는 lawService(본문).
+ * 타임아웃(20초) + 최대 3회 재시도 포함.
  * @param {'lawSearch'|'lawService'} kind
  * @param {Record<string,string|number>} params
  */
@@ -35,7 +36,6 @@ export async function drf(kind, params) {
 
   for (let attempt = 1; attempt <= MAX_RETRY; attempt++) {
     try {
-      // 20초 타임아웃
       const controller = new AbortController();
       const timer = setTimeout(() => controller.abort(), 20000);
 
@@ -63,23 +63,12 @@ export async function drf(kind, params) {
     } catch (e) {
       lastErr = e;
       console.error(`[drf] 시도 ${attempt}/${MAX_RETRY} 실패: ${e.name} ${e.message}`);
-      // 마지막 시도가 아니면 잠시 쉬고 재시도
       if (attempt < MAX_RETRY) {
         await new Promise((r) => setTimeout(r, 2000 * attempt));
       }
     }
   }
   throw new Error(`DRF ${kind} 최종 실패 :: ${lastErr?.name} ${lastErr?.message} :: ${url}`);
-}
-  const text = await res.text();
-  try {
-    return JSON.parse(text);
-  } catch {
-    // 인증키 오류 등은 HTML/평문으로 떨어진다.
-    throw new Error(
-      `DRF ${kind} JSON 파싱 실패 (인증키 OC=${OC} 확인 필요). 응답 일부: ${text.slice(0, 200)}`
-    );
-  }
 }
 
 /** 법령 공개 뷰어 딥링크 모음 (lsId=법령ID, mst=법령일련번호, name=법령명) */
