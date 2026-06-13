@@ -269,7 +269,7 @@
 <header>
   <div class="wrap">
     <h1>법령 데이터 변환기</h1>
-    <p>law.go.kr OpenAPI 응답을 사이트용 JSON으로 변환합니다 · 법무팀 내부 도구</p>
+    <p>law.go.kr · 공공데이터포털 OpenAPI 응답을 사이트용 JSON으로 변환합니다 · 법무팀 내부 도구</p>
   </div>
 </header>
 
@@ -278,16 +278,22 @@
   <div class="step">
     <h2><span class="num">1</span>API 주소에서 데이터 가져오기</h2>
     <p class="hint" style="margin-top:0">
-      아래 두 주소를 브라우저에서 각각 열고, 페이지 전체 내용을 복사하세요. (등록된 IP에서만 데이터가 반환됩니다.)
+      아래 주소를 브라우저에서 각각 열고, 페이지 전체 내용을 복사하세요.
     </p>
     <div class="url-grid">
       <div class="url-block">
-        <div class="url-label law">법령 (laws.json)</div>
+        <div class="url-label law">① 법령 — law.go.kr (등록 IP 필요)</div>
         <textarea readonly style="min-height:auto;height:58px;padding:10px" onclick="this.select()">https://www.law.go.kr/DRF/lawSearch.do?OC=tjfghk1548&type=JSON&target=law&sort=ddes&display=300&page=1</textarea>
       </div>
       <div class="url-block">
-        <div class="url-label notice">입법예고 (bills.json)</div>
-        <textarea readonly style="min-height:auto;height:58px;padding:10px" onclick="this.select()">https://www.law.go.kr/DRF/lawSearch.do?OC=tjfghk1548&type=JSON&target=lsIlJo&sort=ddes&display=100&page=1</textarea>
+        <div class="url-label notice">② 입법예고 — 공공데이터포털 (serviceKey 필요)</div>
+        <div style="display:flex;gap:6px;align-items:center;margin-bottom:6px">
+          <label style="font-size:13px;color:var(--muted);white-space:nowrap">serviceKey</label>
+          <input id="serviceKey" type="text" placeholder="발급받은 키 입력 후 URL 복사"
+            style="flex:1;padding:6px 8px;border:1px solid var(--line);border-radius:7px;font-size:12px;font-family:ui-monospace,monospace"
+            oninput="updateNoticeUrl()" />
+        </div>
+        <textarea id="notice-url" readonly style="min-height:auto;height:58px;padding:10px" onclick="this.select()">https://apis.data.go.kr/1170000/lawAdvanceNotice/lawSearchList.do?serviceKey=&type=json&numOfRows=100&pageNo=1</textarea>
       </div>
     </div>
   </div>
@@ -316,7 +322,7 @@
       </div>
       <div class="input-block">
         <div class="input-block-label notice">입법예고 JSON</div>
-        <textarea id="in-notice" class="notice-ta" placeholder="law.go.kr 입법예고 검색 결과(JSON) 전체를 붙여넣으세요."></textarea>
+        <textarea id="in-notice" class="notice-ta" placeholder="공공데이터포털 입법예고 API 응답(JSON) 전체를 붙여넣으세요."></textarea>
       </div>
     </div>
 
@@ -374,6 +380,13 @@
 </main>
 
 <script>
+  function updateNoticeUrl() {
+    const key = document.getElementById('serviceKey').value.trim();
+    document.getElementById('notice-url').value =
+      'https://apis.data.go.kr/1170000/lawAdvanceNotice/lawSearchList.do?serviceKey=' +
+      encodeURIComponent(key) + '&type=json&numOfRows=100&pageNo=1';
+  }
+
   // Sync days label display
   document.getElementById('days').addEventListener('input', function() {
     const v = this.value;
@@ -432,27 +445,34 @@
     };
   }
 
-  // ── 입법예고 ─────────────────────────────────────────────
-  function noticeLink(lsiSeq, name) {
-    if (lsiSeq) {
-      return 'https://www.law.go.kr/LSW/lsInfoP.do?lsiSeq=' + lsiSeq + '&chrClsCd=010204&urlMode=lsInfoP';
+  // ── 입법예고 (공공데이터포털 APIs: apis.data.go.kr) ─────────
+  function pick(obj) {
+    const keys = Array.prototype.slice.call(arguments, 1);
+    for (let i = 0; i < keys.length; i++) {
+      const v = obj && obj[keys[i]];
+      if (v != null && String(v).trim() !== '') return String(v).trim();
     }
-    return 'https://www.law.go.kr/lsEfInfoP.do?lsiSeq=0#AJAX';
+    return null;
   }
   function normalizeNotice(row) {
-    const lsiSeq   = String(row['법령일련번호'] || row['일련번호'] || '').trim();
-    const name     = String(row['법령명한글'] || row['법령명'] || '').trim();
-    const deadline = fmtDate(row['입법예고마감일'] || row['의견마감일'] || row['마감일자'] || '');
-    const annDate  = fmtDate(row['공고일자'] || row['입법예고일자'] || '');
+    const attachments = asArray(row['첨부파일'] || row['files'] || row['fileList'])
+      .map(function(f) {
+        const url   = pick(f, 'fileUrl', '파일링크', 'downloadUrl', 'url');
+        const label = pick(f, 'fileName', '파일명', 'name') || '첨부파일';
+        return url ? { label: label, kind: 'file', url: url, direct: true } : null;
+      })
+      .filter(Boolean);
     return {
-      id: lsiSeq || null,
-      name: name,
-      noticeType: String(row['예고구분명'] || row['예고구분'] || '').trim() || null,
-      ministry: String(row['소관부처명'] || '').trim() || null,
-      announcementDate: annDate,
-      deadline: deadline,
-      noticeNo: String(row['공고번호'] || '').trim() || null,
-      link: noticeLink(lsiSeq, name)
+      id:              pick(row, '입법예고일련번호', 'lawmkSeq', 'id', 'seq'),
+      title:           pick(row, '입법예고명', '법령명', 'title', 'name'),
+      ministry:        pick(row, '소관부처명', '부처명', 'ministry'),
+      noticeDate:      fmtDate(pick(row, '공고일자', '입법예고일', 'noticeDate')),
+      opinionStart:    fmtDate(pick(row, '의견제출시작일', 'opinionStartDate')),
+      opinionDeadline: fmtDate(pick(row, '의견제출마감일', '의견제출종료일', 'opinionEndDate')),
+      reason:          pick(row, '제안이유', 'reason'),
+      mainContent:     pick(row, '주요내용', 'mainContent', 'content'),
+      detailUrl:       pick(row, '입법예고상세링크', '입법예고링크', 'detailLink', 'link'),
+      attachments:     attachments
     };
   }
 
@@ -501,25 +521,27 @@
     try { json = JSON.parse(raw); }
     catch (e) { return { all: [], kept: [], skipped: 'parse' }; }
 
-    // Try multiple possible root keys
-    const root = json.LsIlJoSearch || json.LsStmdSearch || json.LawSearch || json;
+    // 공공데이터포털 표준 응답 구조 (여러 형태 허용)
     const items = asArray(
-      root.lsIlJo || root.lsStmd || root.law || root.item || null
+      (json.response && json.response.body && json.response.body.items && json.response.body.items.item) ||
+      (json.body && json.body.items && json.body.items.item) ||
+      json.items ||
+      (json.lawSearch && json.lawSearch.law)
     );
     if (items.length === 0) return { all: [], kept: [], skipped: 'norows' };
 
     const { today, past } = getDateBounds(days);
-    const all = items.map(normalizeNotice).filter(x => x.name);
-    const kept = all.filter(x => {
-      const dl  = parseDate(x.deadline);
-      const ann = parseDate(x.announcementDate);
+    const all = items.map(normalizeNotice).filter(function(x) { return x.title; });
+    const kept = all.filter(function(x) {
+      const dl  = parseDate(x.opinionDeadline);
+      const ann = parseDate(x.noticeDate);
       const stillOpen      = dl  && dl  >= today;
       const recentlyPosted = ann && ann >= past && ann <= today;
       return stillOpen || recentlyPosted;
-    }).sort((a, b) =>
-      String(a.deadline || '').localeCompare(String(b.deadline || ''))
-    );
-    return { all, kept, skipped: null };
+    }).sort(function(a, b) {
+      return String(a.opinionDeadline || '').localeCompare(String(b.opinionDeadline || ''));
+    });
+    return { all: all, kept: kept, skipped: null };
   }
 
   // ── 미리보기 ─────────────────────────────────────────────
@@ -538,16 +560,14 @@
   }
   function renderNoticePreview(kept) {
     const today = new Date(); today.setHours(0,0,0,0);
-    let html = '<table><thead><tr><th>법령명</th><th>구분</th><th>소관부처</th><th>공고일</th><th>마감일</th></tr></thead><tbody>';
-    kept.forEach(x => {
-      const dl = parseDate(x.deadline);
+    let html = '<table><thead><tr><th>입법예고명</th><th>소관부처</th><th>공고일</th><th>의견마감일</th></tr></thead><tbody>';
+    kept.forEach(function(x) {
+      const dl = parseDate(x.opinionDeadline);
       const isSoon = dl && dl >= today && (dl - today) / 864e5 <= 7;
-      html += '<tr><td>' + escapeHtml(x.name) +
-        (x.noticeType ? ' <span class="tag notice">' + escapeHtml(x.noticeType) + '</span>' : '') +
-        '</td><td>' + escapeHtml(x.noticeType || '') +
+      html += '<tr><td>' + escapeHtml(x.title || '') +
         '</td><td>' + escapeHtml(x.ministry || '') +
-        '</td><td class="date">' + escapeHtml(x.announcementDate || '') +
-        '</td><td class="date">' + escapeHtml(x.deadline || '') +
+        '</td><td class="date">' + escapeHtml(x.noticeDate || '') +
+        '</td><td class="date">' + escapeHtml(x.opinionDeadline || '') +
         (isSoon ? ' <span class="tag deadline-soon">마감임박</span>' : '') +
         '</td></tr>';
     });
@@ -589,7 +609,7 @@
     }
     if (rawNotice.trim()) {
       if (noticeResult.skipped === 'parse')  msgs.push('입법예고 JSON 형식 오류');
-      if (noticeResult.skipped === 'norows') msgs.push('입법예고 목록을 찾을 수 없음 (인증 실패 여부 확인)');
+      if (noticeResult.skipped === 'norows') msgs.push('입법예고 목록을 찾을 수 없음 (serviceKey 확인 또는 response.body.items.item 경로 없음)');
     }
     if (msgs.length > 0) {
       setStatus(msgs.join(' / '), 'warn');
