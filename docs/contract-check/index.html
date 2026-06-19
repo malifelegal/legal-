@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>계약서 오타 검사기 · 미래에셋생명 법무팀</title>
+    <meta
+      name="description"
+      content="계약서 텍스트·PDF·Word(DOCX)를 넣으면 맞춤법·오타·법률용어 혼동·문장부호를 규칙 기반으로 검사합니다. 본문은 브라우저에서만 처리됩니다."
+    />
+    <link rel="stylesheet" href="../assets/styles.css?v=4" />
+    <link rel="stylesheet" href="./checker.css?v=1" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="wrap">
+        <div class="brand">
+          <span class="logo">📝</span>
+          <div>
+            <h1>계약서 오타 검사기</h1>
+            <p class="sub">맞춤법 · 오타 · 법률용어 혼동 · 문장부호 검토 도우미</p>
+          </div>
+        </div>
+        <a class="dash-link" href="../index.html">⚖️ 법령 모니터로 돌아가기</a>
+      </div>
+    </header>
+
+    <main class="wrap cc-main">
+      <p class="cc-privacy">
+        🔒 업로드한 계약서 본문은 <b>서버로 전송되지 않고 이 브라우저 안에서만</b> 분석됩니다.
+        (PDF·DOCX 해석도 브라우저에서 수행)
+      </p>
+
+      <!-- 입력 영역 -->
+      <section class="cc-card">
+        <div id="drop" class="cc-drop">
+          <div class="cc-drop-inner">
+            <span class="cc-drop-ico">📎</span>
+            <div>
+              <b>파일을 끌어다 놓거나</b> 아래에서 선택하세요 — <code>PDF · Word(.docx) · 텍스트(.txt)</code>
+            </div>
+            <label class="cc-filebtn">
+              파일 선택
+              <input type="file" id="file" accept=".pdf,.docx,.txt" hidden />
+            </label>
+          </div>
+        </div>
+        <div id="file-status" class="cc-status"></div>
+
+        <div class="cc-or">또는 본문 붙여넣기</div>
+        <textarea
+          id="input"
+          class="cc-textarea"
+          placeholder="여기에 계약서 본문을 붙여넣으세요…"
+          spellcheck="false"
+        ></textarea>
+
+        <div class="cc-actions">
+          <button id="run" class="btn-sel primary">오타 검사</button>
+          <button id="clear" class="btn-sel ghost dark">지우기</button>
+          <button id="sample" class="cc-link-btn">샘플 넣어보기</button>
+        </div>
+      </section>
+
+      <!-- 결과 요약 -->
+      <section id="summary" class="cc-summary" hidden></section>
+
+      <!-- 결과 목록 -->
+      <section id="results" class="cc-results"></section>
+
+      <!-- 참고 통계 -->
+      <section id="stats" class="cc-stats" hidden></section>
+
+      <p class="cc-disclaimer">
+        ※ 본 도구는 <b>규칙·사전 기반</b>이라 사전에 등록된 패턴만 잡아냅니다.
+        문맥상의 오타나 등록되지 않은 표현은 놓칠 수 있으니, 최종 검토는 반드시 직접 해주세요.
+      </p>
+    </main>
+
+    <footer class="wrap foot">
+      <p>미래에셋생명 법무팀 내부 도구 — 계약서 오타·맞춤법 1차 검토용입니다.</p>
+    </footer>
+
+    <!-- 파서 라이브러리 (브라우저에서만 동작, 본문 전송 없음) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+    <script>
+      if (window.pdfjsLib) {
+        window.pdfjsLib.GlobalWorkerOptions.workerSrc =
+          "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+      }
+    </script>
+    <script src="./checker.js?v=1"></script>
+  </body>
+</html>

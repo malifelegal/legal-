@@ -9,6 +9,7 @@
 - 📝 **정부입법예고**: 제안이유·주요내용(API 원문) 요약과 의견제출 기한, 첨부파일.
 - 📂 **첨부파일 원클릭**: 법령 본문 · 신구조문대비표 · 제·개정문을 버튼 하나로 열기(또는 한번에 열기).
 - ⭐ **주요 법령**: 법령 탭에서 체크로 고른 항목을 `featured.json` 으로 내보내 팀 공유.
+- 📝 **계약서 오타 검사기**: 계약서 본문(텍스트·PDF·Word)을 넣으면 맞춤법·오타·법률용어 혼동·문장부호를 규칙/사전 기반으로 1차 검토. **본문은 서버 전송 없이 브라우저에서만 처리**.
 - 🚀 **자동 배포**: `docs/` 가 변경되면 GitHub Actions 가 GitHub Pages 로 배포.
 
 ## 구조
@@ -18,6 +19,10 @@ docs/                       # GitHub Pages 루트 (정적 사이트)
   index.html
   assets/{app.js, styles.css}
   data/{laws,bills,meta}.json   # 수집 결과 (자동 생성)
+  contract-check/             # 계약서 오타 검사기 (독립 페이지, 100% 브라우저)
+    index.html
+    checker.js                # 검사 엔진 + 규칙/사전 + PDF·DOCX 파싱
+    checker.css
 scripts/                    # 데이터 수집기 (로컬에서 실행 → JSON 커밋)
   fetch.mjs                 # 오케스트레이터
   fetch-laws.mjs            # 법령 공포/시행 (law.go.kr OpenAPI)
