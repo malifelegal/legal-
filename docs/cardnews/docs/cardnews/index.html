@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>월간 법령 카드뉴스 · 미래에셋생명 법무팀</title>
+  <style>
+    :root {
+      --brand: #1a3a5c;
+      --accent: #e8792a;
+      --bg: #f5f6f8;
+      --card-bg: #ffffff;
+      --border: #dde1e9;
+      --text: #1d2433;
+      --sub: #64748b;
+      --law: #2563eb;
+      --decree: #7c3aed;
+      --rule: #0891b2;
+      --bill: #d97706;
+      --radius: 12px;
+      --shadow: 0 2px 12px rgba(0,0,0,0.08);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif; }
+
+    /* ── 헤더 ── */
+    .topbar {
+      background: var(--brand);
+      color: #fff;
+      padding: 20px 0;
+      position: sticky; top: 0; z-index: 100;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+    .wrap { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+    .topbar .wrap { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+    .brand { display: flex; align-items: center; gap: 12px; flex: 1; }
+    .logo { font-size: 2rem; }
+    .brand h1 { font-size: 1.25rem; font-weight: 700; }
+    .brand .sub { font-size: 0.8rem; opacity: 0.75; margin-top: 2px; }
+    .back-btn {
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.3);
+      color: #fff; padding: 6px 14px; border-radius: 6px;
+      text-decoration: none; font-size: 0.85rem; cursor: pointer;
+      transition: background .15s;
+    }
+    .back-btn:hover { background: rgba(255,255,255,0.25); }
+
+    /* ── 월 선택 ── */
+    .month-bar {
+      background: #fff;
+      border-bottom: 1px solid var(--border);
+      padding: 14px 0;
+    }
+    .month-bar .wrap {
+      display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+    }
+    .month-btn {
+      border: 1px solid var(--border);
+      background: #fff; color: var(--text);
+      padding: 6px 16px; border-radius: 20px;
+      cursor: pointer; font-size: 0.875rem; transition: all .15s;
+    }
+    .month-btn:hover { border-color: var(--brand); color: var(--brand); }
+    .month-btn.is-active { background: var(--brand); color: #fff; border-color: var(--brand); }
+    #month-label { font-weight: 700; font-size: 1rem; color: var(--brand); margin-right: 4px; }
+
+    /* ── 인쇄/공유 툴바 ── */
+    .toolbar {
+      padding: 14px 0;
+      display: flex; gap: 10px; align-items: center; justify-content: flex-end;
+    }
+    .btn {
+      padding: 7px 16px; border-radius: 8px;
+      font-size: 0.85rem; cursor: pointer; border: none; font-weight: 600;
+      display: flex; align-items: center; gap: 6px; transition: opacity .15s;
+    }
+    .btn:hover { opacity: 0.85; }
+    .btn-print { background: var(--brand); color: #fff; }
+    .btn-copy  { background: var(--accent); color: #fff; }
+    .stat-bar {
+      display: flex; gap: 16px; align-items: center;
+      font-size: 0.85rem; color: var(--sub);
+      flex: 1;
+    }
+    .stat-item strong { color: var(--text); font-size: 1rem; }
+
+    /* ── 카드 그리드 ── */
+    main.wrap { padding-top: 4px; padding-bottom: 48px; }
+    .section-title {
+      font-size: 1rem; font-weight: 700; color: var(--sub);
+      margin: 24px 0 10px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .section-title::after {
+      content: ''; flex: 1; height: 1px; background: var(--border);
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 16px;
+    }
+
+    /* ── 법령 카드 ── */
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 18px;
+      position: relative;
+      break-inside: avoid;
+      transition: box-shadow .15s;
+    }
+    .card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.12); }
+    .card-no {
+      position: absolute; top: -8px; left: 14px;
+      background: var(--brand); color: #fff;
+      font-size: 0.7rem; font-weight: 700;
+      padding: 2px 8px; border-radius: 10px;
+    }
+    .card h2 { font-size: 0.95rem; font-weight: 700; margin-bottom: 8px; line-height: 1.4; padding-top: 4px; }
+    .badges { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 10px; }
+    .badge {
+      font-size: 0.7rem; font-weight: 600;
+      padding: 2px 8px; border-radius: 10px;
+    }
+    .badge.law     { background: #dbeafe; color: var(--law); }
+    .badge.decree  { background: #ede9fe; color: var(--decree); }
+    .badge.rule    { background: #cffafe; color: var(--rule); }
+    .badge.bill    { background: #fef3c7; color: var(--bill); }
+    .badge.ministry { background: #f1f5f9; color: var(--sub); }
+    .badge.relevant { background: #fef2f2; color: #dc2626; font-weight: 700; }
+
+    .dates { display: flex; flex-wrap: wrap; gap: 10px; font-size: 0.8rem; color: var(--sub); margin-bottom: 10px; }
+    .dates .future { color: #dc2626; font-weight: 700; }
+
+    .summary {
+      font-size: 0.82rem; line-height: 1.6; color: #374151;
+      background: #f8fafc; border-left: 3px solid var(--accent);
+      padding: 8px 10px; border-radius: 0 6px 6px 0; margin-bottom: 10px;
+    }
+
+    .links { display: flex; flex-wrap: wrap; gap: 6px; }
+    .link-btn {
+      font-size: 0.75rem; padding: 4px 10px;
+      border: 1px solid var(--border); border-radius: 6px;
+      text-decoration: none; color: var(--text); background: #fff;
+      transition: all .15s;
+    }
+    .link-btn:hover { border-color: var(--brand); color: var(--brand); }
+
+    /* ── 빈 상태 ── */
+    .empty {
+      text-align: center; padding: 48px 24px; color: var(--sub);
+      background: #fff; border-radius: var(--radius); border: 1px solid var(--border);
+    }
+    .empty h3 { font-size: 1.1rem; margin-bottom: 8px; }
+    .empty p { font-size: 0.875rem; line-height: 1.7; }
+    .empty code { background: #f1f5f9; padding: 2px 6px; border-radius: 4px; font-size: 0.8rem; }
+
+    /* ── 인쇄 ── */
+    @media print {
+      .topbar, .month-bar, .toolbar { display: none; }
+      .card { box-shadow: none; border: 1px solid #ccc; }
+      .grid { grid-template-columns: repeat(2, 1fr); }
+      body { background: #fff; }
+    }
+  </style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="wrap">
+    <div class="brand">
+      <span class="logo">📰</span>
+      <div>
+        <h1>월간 법령 카드뉴스</h1>
+        <p class="sub">미래에셋생명 법무팀 · 주요 법령 변경사항 요약</p>
+      </div>
+    </div>
+    <a class="back-btn" href="../index.html">← 법령 모니터로 돌아가기</a>
+  </div>
+</header>
+
+<nav class="month-bar">
+  <div class="wrap">
+    <span id="month-label">—</span>
+    <div id="month-tabs"></div>
+  </div>
+</nav>
+
+<div class="wrap toolbar">
+  <div class="stat-bar" id="stat-bar"></div>
+  <button class="btn btn-copy" id="btn-copy">📋 목록 복사</button>
+  <button class="btn btn-print" onclick="window.print()">🖨️ 인쇄</button>
+</div>
+
+<main class="wrap" id="main-panel"></main>
+
+<script>
+// ─────────────────────────────────────────────
+// 유틸
+// ─────────────────────────────────────────────
+const esc = (s) =>
+  String(s ?? '').replace(/[&<>"]/g, (c) =>
+    ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c])
+  );
+
+const fmtDate = (d) => d || '—';
+
+const isFuture = (d) => d && new Date(d) > new Date();
+
+function lawTypeClass(t) {
+  if (!t) return '';
+  if (t.includes('법률')) return 'law';
+  if (t.includes('대통령령')) return 'decree';
+  if (t.includes('총리령') || t.includes('부령') || t.includes('규칙')) return 'rule';
+  return '';
+}
+
+async function loadJSON(path, fallback) {
+  try {
+    const r = await fetch(path, { cache: 'no-cache' });
+    if (!r.ok) return fallback;
+    return await r.json();
+  } catch { return fallback; }
+}
+
+// ─────────────────────────────────────────────
+// 상태
+// ─────────────────────────────────────────────
+const state = {
+  all: [],       // featured.json 전체
+  months: [],    // 사용 가능한 월 목록 (YYYY-MM)
+  current: null, // 현재 선택된 월
+};
+
+// ─────────────────────────────────────────────
+// 월 추출 (공포일 기준)
+// ─────────────────────────────────────────────
+function extractMonths(items) {
+  const set = new Set();
+  items.forEach((x) => {
+    const d = x.promulgationDate || x.enforcementDate;
+    if (d && d.length >= 7) set.add(d.slice(0, 7));
+  });
+  return [...set].sort().reverse();
+}
+
+function monthLabel(ym) {
+  if (!ym) return '—';
+  const [y, m] = ym.split('-');
+  return `${y}년 ${parseInt(m, 10)}월`;
+}
+
+// ─────────────────────────────────────────────
+// 카드 렌더
+// ─────────────────────────────────────────────
+function cardHTML(x, idx) {
+  const cls = lawTypeClass(x.lawType);
+  const future = isFuture(x.enforcementDate);
+  const isRelevant = x.isRelevant;
+
+  const linksHTML = (x.links || x.attachments)
+    ? `<div class="links">
+        ${x.links?.fullText ? `<a class="link-btn" href="${esc(x.links.fullText)}" target="_blank" rel="noopener">📄 법령 본문</a>` : ''}
+        ${x.links?.oldNew  ? `<a class="link-btn" href="${esc(x.links.oldNew)}"  target="_blank" rel="noopener">📊 신구조문</a>` : ''}
+        ${x.links?.reason  ? `<a class="link-btn" href="${esc(x.links.reason)}"  target="_blank" rel="noopener">📝 개정이유</a>` : ''}
+      </div>`
+    : '';
+
+  return `
+    <article class="card">
+      <div class="card-no">${idx}</div>
+      <h2>${esc(x.name)}</h2>
+      <div class="badges">
+        ${x.lawType ? `<span class="badge ${cls}">${esc(x.lawType)}</span>` : ''}
+        ${x.revisionType ? `<span class="badge rule">${esc(x.revisionType)}</span>` : ''}
+        ${x.ministry ? `<span class="badge ministry">${esc(x.ministry)}</span>` : ''}
+        ${isRelevant ? `<span class="badge relevant">⚡ 보험 관련</span>` : ''}
+      </div>
+      <div class="dates">
+        <span>📢 공포 <b>${fmtDate(x.promulgationDate)}</b></span>
+        <span class="${future ? 'future' : ''}">🗓 시행 <b>${fmtDate(x.enforcementDate)}</b>${future ? ' (예정)' : ''}</span>
+      </div>
+      ${x.summary ? `<div class="summary">${esc(x.summary)}</div>` : ''}
+      ${linksHTML}
+    </article>`;
+}
+
+// ─────────────────────────────────────────────
+// 렌더
+// ─────────────────────────────────────────────
+function render() {
+  const panel = document.getElementById('main-panel');
+  const statBar = document.getElementById('stat-bar');
+  document.getElementById('month-label').textContent = monthLabel(state.current);
+
+  // 월 탭 렌더
+  const tabContainer = document.getElementById('month-tabs');
+  tabContainer.innerHTML = state.months
+    .map(
+      (m) =>
+        `<button class="month-btn ${m === state.current ? 'is-active' : ''}"
+          data-month="${m}">${monthLabel(m)}</button>`
+    )
+    .join('');
+
+  // 현재 월 항목 필터
+  const items = state.all.filter((x) => {
+    const d = x.promulgationDate || x.enforcementDate;
+    return d && d.slice(0, 7) === state.current;
+  });
+
+  if (!state.all.length) {
+    panel.innerHTML = `
+      <div class="empty">
+        <h3>주요 법령이 아직 등록되지 않았습니다</h3>
+        <p>
+          법령 모니터(<a href="../index.html">← 돌아가기</a>)에서<br/>
+          카드 체크박스로 주요 법령을 선택한 뒤<br/>
+          <b>선택 목록 내보내기</b>로 <code>docs/data/featured.json</code>을 업데이트하세요.
+        </p>
+      </div>`;
+    statBar.innerHTML = '';
+    return;
+  }
+
+  if (!items.length) {
+    panel.innerHTML = `<div class="empty"><h3>${monthLabel(state.current)} 등록된 법령이 없습니다</h3></div>`;
+  } else {
+    // 보험 관련 vs 일반 분리
+    const relevant = items.filter((x) => x.isRelevant !== false && (x.isRelevant === true || !('isRelevant' in x)));
+    const others   = items.filter((x) => x.isRelevant === false);
+
+    let html = '';
+    let idx = 1;
+
+    if (relevant.length) {
+      html += `<div class="section-title">⚡ 보험·금융 관련 법령 (${relevant.length}건)</div>`;
+      html += `<div class="grid">${relevant.map((x) => cardHTML(x, idx++)).join('')}</div>`;
+    }
+    if (others.length) {
+      html += `<div class="section-title">기타 법령 (${others.length}건)</div>`;
+      html += `<div class="grid">${others.map((x) => cardHTML(x, idx++)).join('')}</div>`;
+    }
+    panel.innerHTML = html;
+  }
+
+  // 통계
+  const relevantCount = items.filter((x) => x.isRelevant !== false).length;
+  statBar.innerHTML = `
+    <span>전체 <strong>${items.length}</strong>건</span>
+    <span>보험·금융 관련 <strong style="color:#dc2626">${relevantCount}</strong>건</span>
+    <span>기타 <strong>${items.length - relevantCount}</strong>건</span>
+  `;
+}
+
+// ─────────────────────────────────────────────
+// 이벤트
+// ─────────────────────────────────────────────
+document.getElementById('month-tabs').addEventListener('click', (e) => {
+  const btn = e.target.closest('.month-btn');
+  if (!btn) return;
+  state.current = btn.dataset.month;
+  render();
+});
+
+document.getElementById('btn-copy').addEventListener('click', () => {
+  const items = state.all.filter((x) => {
+    const d = x.promulgationDate || x.enforcementDate;
+    return d && d.slice(0, 7) === state.current;
+  });
+  const text = items
+    .map(
+      (x, i) =>
+        `${i + 1}. [${x.lawType || '법령'}] ${x.name}\n` +
+        `   공포: ${x.promulgationDate || '—'}  시행: ${x.enforcementDate || '—'}\n` +
+        `   ${x.links?.fullText || ''}`
+    )
+    .join('\n\n');
+
+  navigator.clipboard?.writeText(text).then(() => {
+    const btn = document.getElementById('btn-copy');
+    btn.textContent = '✓ 복사됨';
+    setTimeout(() => (btn.textContent = '📋 목록 복사'), 1500);
+  });
+});
+
+// ─────────────────────────────────────────────
+// 부트스트랩
+// ─────────────────────────────────────────────
+async function init() {
+  const [featured, meta] = await Promise.all([
+    loadJSON('../data/featured.json', []),
+    loadJSON('../data/meta.json', null),
+  ]);
+
+  state.all = Array.isArray(featured) ? featured : [];
+  state.months = extractMonths(state.all);
+
+  // URL 파라미터로 월 지정 가능 (?month=2026-06)
+  const urlMonth = new URLSearchParams(location.search).get('month');
+  state.current = (urlMonth && state.months.includes(urlMonth))
+    ? urlMonth
+    : (state.months[0] || new Date().toISOString().slice(0, 7));
+
+  render();
+}
+
+init();
+</script>
+</body>
+</html>
