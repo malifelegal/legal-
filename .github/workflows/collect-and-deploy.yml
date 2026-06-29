@@ -1,0 +1,71 @@
+name: 법령 수집 + Pages 배포
+
+on:
+  schedule:
+    - cron: '0 0 * * *'
+  push:
+    branches: [main]
+    paths:
+      - 'docs/**'
+  workflow_dispatch:
+    inputs:
+      run_collect:
+        description: '데이터 수집 실행 여부'
+        required: false
+        default: 'true'
+        type: choice
+        options: ['true', 'false']
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  collect:
+    name: 법령 데이터 수집
+    runs-on: ubuntu-latest
+    if: >
+      github.event_name == 'schedule' ||
+      (github.event_name == 'workflow_dispatch' && github.event.inputs.run_collect == 'true')
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: 법령 수집
+        env:
+          LAW_OC: ${{ secrets.LAW_OC }}
+          DATA_GO_KR_KEY: ${{ secrets.DATA_GO_KR_KEY }}
+          LAWS_RECENT_DAYS: '30'
+          LAWS_DISPLAY: '300'
+        run: node scripts/fetch.mjs
+      - name: 커밋
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add docs/data/
+          if git diff --staged --quiet; then echo "변경없음"; else git commit -m "data: 법령 갱신 [skip ci]" && git push; fi
+
+  deploy:
+    name: GitHub Pages 배포
+    runs-on: ubuntu-latest
+    needs: [collect]
+    if: always()
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: './docs'
+      - id: deployment
+        uses: actions/deploy-pages@v4
