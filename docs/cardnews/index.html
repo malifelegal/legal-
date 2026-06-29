@@ -148,7 +148,14 @@ footer strong{color:var(--blue);}
 </footer>
 
 <script>
-const typeClass = (t) => t === '법률' ? 'law' : (t.includes('령') && !t.includes('규칙') ? 'decree' : 'rule');
+const typeClass = (t) => {
+  if (!t) return 'rule';
+  if (t === '법률') return 'law';
+  if (t === '대통령령') return 'decree';
+  if (t.includes('총리령') || t.includes('부령') || t.includes('규칙')) return 'rule';
+  if (t.includes('령')) return 'decree';
+  return 'rule';
+};
 const impactLabel = { high:'영향 큼', mid:'영향 보통', low:'참고' };
 
 function fmtDate(d){

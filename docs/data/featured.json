@@ -1,41 +1,119 @@
-[[
+[
   {
-    "id": "006175",
-    "mst": "286885",
-    "name": "건설기술 진흥법 시행규칙",
+    "id": "011468",
+    "mst": "286175",
+    "name": "개인정보 보호법 시행령",
     "abbr": null,
-    "lawType": "국토교통부령",
+    "lawType": "대통령령",
     "revisionType": "일부개정",
-    "ministry": "국토교통부",
-    "promulgationDate": "2026-06-11",
-    "promulgationNo": "01597",
-    "enforcementDate": "2026-06-11",
+    "ministry": "개인정보보호위원회",
+    "promulgationDate": "2026-05-19",
+    "promulgationNo": "36340",
+    "enforcementDate": "2026-05-19",
+    "summary": "안전조치 기준 구체화 및 개인정보 전송요구권 세부 절차 신설. 보유 개인정보 관리체계 재점검 권장.",
     "links": {
-      "fullText": "https://www.law.go.kr/법령/%EA%B1%B4%EC%84%A4%EA%B8%B0%EC%88%A0%20%EC%A7%84%ED%9D%A5%EB%B2%95%20%EC%8B%9C%ED%96%89%EA%B7%9C%EC%B9%99",
-      "oldNew": "https://www.law.go.kr/LSW/lsInfoP.do?lsId=006175&lsiSeq=286885&chrClsCd=010202&viewCls=lsOldAndNew&urlMode=lsOldAndNew",
-      "reason": "https://www.law.go.kr/LSW/lsInfoP.do?lsId=006175&lsiSeq=286885&chrClsCd=010202&viewCls=lsRvsDoc&urlMode=lsRvsDoc",
-      "detail": "https://www.law.go.kr/LSW/lsInfoP.do?lsId=006175&lsiSeq=286885&efYd=&chrClsCd=010202"
+      "fullText": "https://www.law.go.kr/법령/%EA%B0%9C%EC%9D%B8%EC%A0%95%EB%B3%B4%20%EB%B3%B4%ED%98%B8%EB%B2%95%20%EC%8B%9C%ED%96%89%EB%A0%B9",
+      "oldNew": "https://www.law.go.kr/LSW/lsInfoP.do?lsId=011468&lsiSeq=286175&chrClsCd=010202&viewCls=lsOldAndNew&urlMode=lsOldAndNew",
+      "reason": "https://www.law.go.kr/LSW/lsInfoP.do?lsId=011468&lsiSeq=286175&chrClsCd=010202&viewCls=lsRvsDoc&urlMode=lsRvsDoc",
+      "detail": "https://www.law.go.kr/LSW/lsInfoP.do?lsId=011468&lsiSeq=286175&efYd=&chrClsCd=010202"
     },
     "attachments": [
       {
         "label": "법령 본문",
         "kind": "law",
-        "url": "https://www.law.go.kr/법령/%EA%B1%B4%EC%84%A4%EA%B8%B0%EC%88%A0%20%EC%A7%84%ED%9D%A5%EB%B2%95%20%EC%8B%9C%ED%96%89%EA%B7%9C%EC%B9%99",
+        "url": "https://www.law.go.kr/법령/%EA%B0%9C%EC%9D%B8%EC%A0%95%EB%B3%B4%20%EB%B3%B4%ED%98%B8%EB%B2%95%20%EC%8B%9C%ED%96%89%EB%A0%B9",
         "direct": false
       },
       {
         "label": "신구조문대비표",
         "kind": "oldnew",
-        "url": "https://www.law.go.kr/LSW/lsInfoP.do?lsId=006175&lsiSeq=286885&chrClsCd=010202&viewCls=lsOldAndNew&urlMode=lsOldAndNew",
+        "url": "https://www.law.go.kr/LSW/lsInfoP.do?lsId=011468&lsiSeq=286175&chrClsCd=010202&viewCls=lsOldAndNew&urlMode=lsOldAndNew",
         "direct": false
       },
       {
         "label": "제·개정문 / 이유",
         "kind": "reason",
-        "url": "https://www.law.go.kr/LSW/lsInfoP.do?lsId=006175&lsiSeq=286885&chrClsCd=010202&viewCls=lsRvsDoc&urlMode=lsRvsDoc",
+        "url": "https://www.law.go.kr/LSW/lsInfoP.do?lsId=011468&lsiSeq=286175&chrClsCd=010202&viewCls=lsRvsDoc&urlMode=lsRvsDoc",
+        "direct": false
+      }
+    ]
+  },
+  {
+    "id": "010817",
+    "mst": "286315",
+    "name": "자본시장과 금융투자업에 관한 법률 시행령",
+    "abbr": "자본시장법 시행령",
+    "lawType": "대통령령",
+    "revisionType": "일부개정",
+    "ministry": "금융위원회",
+    "promulgationDate": "2026-05-26",
+    "promulgationNo": "36357",
+    "enforcementDate": "2026-05-26",
+    "summary": "변액보험 특별계정 운용·공시 관련 세부 기준 정비. 운용·상품 부서 확인 권장.",
+    "links": {
+      "fullText": "https://www.law.go.kr/법령/%EC%9E%90%EB%B3%B8%EC%8B%9C%EC%9E%A5%EA%B3%BC%20%EA%B8%88%EC%9C%B5%ED%88%AC%EC%9E%90%EC%97%85%EC%97%90%20%EA%B4%80%ED%95%9C%20%EB%B2%95%EB%A5%A0%20%EC%8B%9C%ED%96%89%EB%A0%B9",
+      "oldNew": "https://www.law.go.kr/LSW/lsInfoP.do?lsId=010817&lsiSeq=286315&chrClsCd=010202&viewCls=lsOldAndNew&urlMode=lsOldAndNew",
+      "reason": "https://www.law.go.kr/LSW/lsInfoP.do?lsId=010817&lsiSeq=286315&chrClsCd=010202&viewCls=lsRvsDoc&urlMode=lsRvsDoc",
+      "detail": "https://www.law.go.kr/LSW/lsInfoP.do?lsId=010817&lsiSeq=286315&efYd=&chrClsCd=010202"
+    },
+    "attachments": [
+      {
+        "label": "법령 본문",
+        "kind": "law",
+        "url": "https://www.law.go.kr/법령/%EC%9E%90%EB%B3%B8%EC%8B%9C%EC%9E%A5%EA%B3%BC%20%EA%B8%88%EC%9C%B5%ED%88%AC%EC%9E%90%EC%97%85%EC%97%90%20%EA%B4%80%ED%95%9C%20%EB%B2%95%EB%A5%A0%20%EC%8B%9C%ED%96%89%EB%A0%B9",
+        "direct": false
+      },
+      {
+        "label": "신구조문대비표",
+        "kind": "oldnew",
+        "url": "https://www.law.go.kr/LSW/lsInfoP.do?lsId=010817&lsiSeq=286315&chrClsCd=010202&viewCls=lsOldAndNew&urlMode=lsOldAndNew",
+        "direct": false
+      },
+      {
+        "label": "제·개정문 / 이유",
+        "kind": "reason",
+        "url": "https://www.law.go.kr/LSW/lsInfoP.do?lsId=010817&lsiSeq=286315&chrClsCd=010202&viewCls=lsRvsDoc&urlMode=lsRvsDoc",
+        "direct": false
+      }
+    ]
+  },
+  {
+    "id": "010436",
+    "mst": "286217",
+    "name": "노인장기요양보험법",
+    "abbr": null,
+    "lawType": "법률",
+    "revisionType": "일부개정",
+    "ministry": "보건복지부",
+    "promulgationDate": "2026-05-26",
+    "promulgationNo": "21690",
+    "enforcementDate": "2026-05-26",
+    "summary": "장기요양 등급판정·급여 절차 일부 개선. 간병·요양 연계 보험 상품 모니터링 대상.",
+    "links": {
+      "fullText": "https://www.law.go.kr/법령/%EB%85%B8%EC%9D%B8%EC%9E%A5%EA%B8%B0%EC%9A%94%EC%96%91%EB%B3%B4%ED%97%98%EB%B2%95",
+      "oldNew": "https://www.law.go.kr/LSW/lsInfoP.do?lsId=010436&lsiSeq=286217&chrClsCd=010202&viewCls=lsOldAndNew&urlMode=lsOldAndNew",
+      "reason": "https://www.law.go.kr/LSW/lsInfoP.do?lsId=010436&lsiSeq=286217&chrClsCd=010202&viewCls=lsRvsDoc&urlMode=lsRvsDoc",
+      "detail": "https://www.law.go.kr/LSW/lsInfoP.do?lsId=010436&lsiSeq=286217&efYd=&chrClsCd=010202"
+    },
+    "attachments": [
+      {
+        "label": "법령 본문",
+        "kind": "law",
+        "url": "https://www.law.go.kr/법령/%EB%85%B8%EC%9D%B8%EC%9E%A5%EA%B8%B0%EC%9A%94%EC%96%91%EB%B3%B4%ED%97%98%EB%B2%95",
+        "direct": false
+      },
+      {
+        "label": "신구조문대비표",
+        "kind": "oldnew",
+        "url": "https://www.law.go.kr/LSW/lsInfoP.do?lsId=010436&lsiSeq=286217&chrClsCd=010202&viewCls=lsOldAndNew&urlMode=lsOldAndNew",
+        "direct": false
+      },
+      {
+        "label": "제·개정문 / 이유",
+        "kind": "reason",
+        "url": "https://www.law.go.kr/LSW/lsInfoP.do?lsId=010436&lsiSeq=286217&chrClsCd=010202&viewCls=lsRvsDoc&urlMode=lsRvsDoc",
         "direct": false
       }
     ]
   }
-]
 ]

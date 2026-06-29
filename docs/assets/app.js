@@ -472,9 +472,10 @@ async function init() {
     loadJSON('./data/featured.json', []),
     loadJSON('./data/meta.json', null),
   ]);
-  state.laws = Array.isArray(laws) ? laws : [];
-  state.bills = Array.isArray(bills) ? bills : [];
-  state.featured = Array.isArray(featured) ? featured : [];
+  state.laws = Array.isArray(laws) ? laws.flat() : [];
+  state.bills = Array.isArray(bills) ? bills.flat() : [];
+  // flat()으로 이중 배열([[...]]) 방어
+  state.featured = Array.isArray(featured) ? featured.flat() : [];
   state.billsEnabled = !!meta?.sources?.bills?.enabled;
 
   const metaEl = $('#meta');
