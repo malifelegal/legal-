@@ -1,11 +1,11 @@
 {
-  "updatedAt": "2026-06-12T00:00:00.000Z",
+  "updatedAt": "2026-06-30T11:26:51.879Z",
   "oc": "tjf***",
   "sources": {
     "laws": {
-      "ok": true,
+      "ok": false,
       "count": 217,
-      "note": "최근 공포 법령 (수동 갱신)"
+      "error": "DRF lawSearch 최종 실패 :: TypeError fetch failed :: https://www.law.go.kr/DRF/lawSearch.do?OC=tjfghk1548&type=JSON&target=law&sort=ddes&display=300&page=1"
     },
     "bills": {
       "ok": true,
