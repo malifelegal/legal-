@@ -1,10 +1,11 @@
 {
-  "updatedAt": "2026-11-13T03:56:31.166Z",
+  "updatedAt": "2026-11-14T03:54:57.618Z",
   "oc": "tjf***",
   "sources": {
     "laws": {
-      "ok": true,
-      "count": 0
+      "ok": false,
+      "count": 0,
+      "error": "DRF lawSearch 최종 실패 :: Error DRF lawSearch JSON 파싱 실패 (인증키 OC=tjfghk1548 확인 필요). 응답 일부: \r\n<!DOCTYPE html>\r\n<html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">\r\n    <title>시스템 점검</title>\r\n    <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">\r\n    <meta name :: https://www.law.go.kr/DRF/lawSearch.do?OC=tjfghk1548&type=JSON&target=law&sort=ddes&display=300&page=1"
     },
     "bills": {
       "ok": true,
